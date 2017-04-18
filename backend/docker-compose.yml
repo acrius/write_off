@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  write_off_server:
+    container_name: write_off_server
+    build: .
+    volumes:
+    - .:/app
+    ports:
+    - "8000:8000"
+    command: bash -c "python3 server.py"
