@@ -48,7 +48,7 @@ export class Acts extends Component {
             date: 'Дата',
             receiver_storage: 'Склад приемник'
           }}
-          height="500"
+          height="550"
           activated={{
             is_active: {'#669999': false},
             is_upload: {'#ccff99': true}
