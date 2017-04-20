@@ -31,7 +31,7 @@ export class ActTable extends Component {
         keyField="code"
         selectedKeys={this.props.selectedActString}
         setSelected={this.setSelected}
-        height="550" />
+        height="650" />
     );
   }
 }
