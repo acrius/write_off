@@ -1,3 +1,5 @@
+import {STOREKEEPERS} from '../constants';
+
 const models = {
   subdivisions: [],
   storages: [],
@@ -10,6 +12,7 @@ const models = {
 const selectedFields = {
   selectedSubdivision: null,
   selectedStorage: null,
+  selectedActStorage: null,
   selectedActsType: 0,
   selectedAct: null,
   selectedActString: null,
@@ -19,6 +22,7 @@ const selectedFields = {
   selectedReceiverStorage: null,
   selectedMainThing: null,
   selectedMainThingCode: '',
+  selectedStorekeeper: STOREKEEPERS[0],
   selectedUploadActs: []
 };
 

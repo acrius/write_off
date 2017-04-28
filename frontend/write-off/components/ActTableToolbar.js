@@ -33,7 +33,11 @@ export class ActTableToolbar extends Component {
           <RaisedButton
             label="Удалить"
             secondary={true}
-            onTouchTap={this.props.removeActString}/>
+            onTouchTap={this.props.removeActString} />
+          <RaisedButton
+            label="Печать"
+            primary={true}
+            onTouchTap={this.props.print} />
         </ToolbarGroup>
       </Toolbar>
     );

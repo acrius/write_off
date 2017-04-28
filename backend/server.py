@@ -14,7 +14,7 @@ from views import get_subdivisions, get_storages_for_subdivision,\
                   get_table_of_acts, save_act, save_act_table,\
                   update_subdivisions, update_storages, update_remains,\
                   get_main_things, update_main_things, activate_act,\
-                  upload_acts
+                  upload_acts, genereate_acts_views
 
 path.append(settings.PROJECT_PATH)
 
@@ -43,13 +43,11 @@ def get_subdivisions_api(request): #pylint: disable=W0613
     return json(get_subdivisions())
 
 @app.route('/api/v01/storages', methods=['GET',])
-def get_storages(request):
+def get_storages(request): #pylint: disable=W0613
     '''
     Get storages of subdivision with rest-api.
     '''
-    subdivision_id = request.args.get('subdivision')
-    if subdivision_id is not None:
-        return json(get_storages_for_subdivision(subdivision_id))
+    return json(get_storages_for_subdivision())
 
 @app.route('/api/v01/acts', methods=['GET', 'POST'])
 def get_or_post_acts(request):
@@ -57,9 +55,7 @@ def get_or_post_acts(request):
     Get or post acts of storage with rest-api.
     '''
     if request.method == 'GET':
-        storage_id = request.args.get('storage')
-        if storage_id is not None:
-            return json(get_acts_for_storage(storage_id))
+        return json(get_acts_for_storage())
     elif request.method == 'POST':
         return json(save_act(request.json))
 
@@ -95,14 +91,12 @@ def get_updated_subdivisions(request): #pylint: disable=W0613
     return json(get_subdivisions())
 
 @app.route('/api/v01/get_updated_storages', methods=['GET'])
-def get_updated_storages(request):
+def get_updated_storages(request): #pylint: disable=W0613
     '''
     Get updated storages of subdivision with rest-api.
     '''
-    subdivision_id = request.args.get('subdivision')
-    if subdivision_id is not None:
-        update_storages(subdivision_id)
-        return json(get_storages_for_subdivision(subdivision_id))
+    update_storages()
+    return json(get_storages_for_subdivision())
 
 @app.route('/api/v01/get_updated_remains', methods=['GET'])
 def get_updated_remains(request):
@@ -128,6 +122,13 @@ def get_updated_main_things(request): #pylint: disable-msg=W0613
     '''
     update_main_things()
     return json(get_main_things())
+
+@app.route('api/v01/genereate_acts', methods=['GET'])
+def genereate_acts(request):
+    subdivision_id = request.args.get('subdivision')
+    if subdivision_id is not None:
+        genereate_acts_views(subdivision_id)
+    return json(get_acts_for_storage())
 
 @app.route('/api/v01/activate_act', methods=['POST'])
 def activate_act_api(request):

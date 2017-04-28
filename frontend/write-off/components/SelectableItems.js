@@ -48,7 +48,7 @@ export class ReceiverStorageItem extends Component {
   }
 
   updateDataSource = () => {
-    this.props.getModelUpdateData('storages', this.props.selectedSubdivision);
+    this.props.getModelUpdateData('storages');
   }
 
   render() {
@@ -57,7 +57,7 @@ export class ReceiverStorageItem extends Component {
         dataSource={this.props.storages}
         keyField="id"
         viewField="name"
-        hintText="Склад"
+        hintText="Склад-приемник"
         dialogTitle="Выберите склад"
         selectedKeys={this.props.selectedKeys}
         setSelected={this.setSelected}
@@ -72,8 +72,6 @@ export class ReceiverStorageItem extends Component {
 export class SubdivisionItem extends Component {
   setSelected = (key) => {
     this.props.setState({selectedSubdivision: key});
-    this.props.getModelData('storages', key);
-    this.props.getModelData('mainThings');
   }
 
   updateDataSource = () => {
@@ -101,12 +99,39 @@ export class SubdivisionItem extends Component {
 export class StorageItem extends Component {
   setSelected = (key) => {
     this.props.setState({selectedStorage: key});
-    this.props.getModelData(['remains', 'acts'], key);
+    this.props.setState({selectedActStorage: key});
     this.props.setState({selectedAct: null, selectedActString: null});
   }
 
   updateDataSource = () => {
-    this.props.getModelUpdateData('storages', this.props.selectedSubdivision);
+    this.props.getModelUpdateData('storages');
+  }
+
+  render() {
+    return (
+      <SelectableField
+        dataSource={this.props.storages}
+        keyField="id"
+        viewField="name"
+        hintText="Склад"
+        dialogTitle="Выберите склад"
+        selectedKeys={this.props.selectedKeys}
+        setSelected={this.setSelected}
+        updateDataSource={this.updateDataSource}
+        viewsFields={{
+          'code': 'Код',
+          'name': 'Наименование'}} />
+    );
+  }
+}
+
+export class ActStorageItem extends Component {
+  setSelected = (key) => {
+    this.props.setState({selectedActStorage: key});
+  }
+
+  updateDataSource = () => {
+    this.props.getModelUpdateData('storages');
   }
 
   render() {

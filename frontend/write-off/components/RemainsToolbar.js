@@ -46,6 +46,23 @@ export class RemainsToolbar extends Component {
         onTouchTap={this.closeWriteOffDialog} />
     ];
 
+    let dialogFields = [
+      <TextField
+        hintText="Количество"
+        type="number"
+        onChange={this.onChange}
+        style={{margin: 20}} />];
+
+    if (this.props.selectedActsType === 0) {
+      dialogFields.push(
+        <MainThingItem
+          mainThings={this.props.mainThings}
+          selectedKeys={this.props.selectedMainThing}
+          setState={this.props.setState}
+          getModelUpdateData={this.props.getModelUpdateData}
+          selectedSubdivision={this.props.selectedSubdivision} />);
+    }
+
     return (
       <div>
         <Toolbar>
@@ -65,17 +82,7 @@ export class RemainsToolbar extends Component {
           title="Введите количество"
           value={this.state.amount}
           actions={actions}>
-          <TextField
-            hintText="Количество"
-            type="number"
-            onChange={this.onChange}
-            style={{margin: 20}}/>
-          <MainThingItem
-            mainThings={this.props.mainThings}
-            selectedKeys={this.props.selectedMainThing}
-            setState={this.props.setState}
-            getModelUpdateData={this.props.getModelUpdateData}
-            selectedSubdivision={this.props.selectedSubdivision} />
+          { dialogFields.map(field => field) }
         </Dialog>
       </div>
     );

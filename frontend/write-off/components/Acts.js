@@ -3,6 +3,8 @@ import React, {Component} from 'react';
 import {SelectStorageDialog} from './Toolbar';
 import DataTable from './utils/DataTable';
 
+import {getStorageName} from '../../utils';
+
 export class Acts extends Component {
   setSelected = (id) => {
     if (id !== null) {
@@ -15,7 +17,8 @@ export class Acts extends Component {
       }
 
       this.props.setState({selectedAct: id,
-                           selectedStorage: act.storage,
+                           selectedStorekeeper: act.storekeeper,
+                           selectedActStorage: act.storage,
                            selectedReceiverStorage: act.receiver_storage,
                            selectedActDateString: act.date});
     } else {
@@ -23,18 +26,13 @@ export class Acts extends Component {
     }
   }
 
-  getStorageName = (id) => {
-    const storagesNames = this.props
-                              .storages.filter((storage) => storage.id === id)
-                              .map((storage) => storage.name);
-    return storagesNames.length === 1 ? storagesNames[0] : '';
-  }
-
   render() {
     const acts = this.props
                      .acts.filter((act) => act.act_type == this.props.selectedActsType)
                      .map((act) => {
-                        return {...act, receiver_storage: this.getStorageName(act.receiver_storage)}});
+                        return {...act,
+                                receiver_storage: getStorageName(act.receiver_storage, this.props.storages),
+                                storage: getStorageName(act.storage, this.props.storages) }});
 
     return (
       <div>
@@ -46,6 +44,8 @@ export class Acts extends Component {
           viewsFields={{
             id: 'Номер',
             date: 'Дата',
+            storage: 'Склад',
+            storekeeper: 'Кладовщик',
             receiver_storage: 'Склад приемник'
           }}
           height="650"

@@ -21,7 +21,7 @@ const muiTheme = getMiuTheme();
 
 class WriteOff extends Component {
   componentDidMount() {
-    this.props.actions.getModelData('subdivisions');
+    this.props.actions.getModelData(['subdivisions', 'storages', 'mainThings', 'acts']);
   }
 
   closeUploadSnackbar = () => {
@@ -89,8 +89,11 @@ class WriteOff extends Component {
                 selectedStorage={this.props.selectedStorage}
                 selectedActsType={this.props.selectedActsType}
                 selectedUploadActs={this.props.selectedUploadActs}
+                selectedActStorage={this.props.selectedActStorage}
+                selectedStorekeeper={this.props.selectedStorekeeper}
                 activateAct={this.props.actions.activateAct}
                 uploadActs={this.props.actions.uploadActs}
+                generateActs={this.props.actions.generateActs}
                 acts={this.props.acts}
                 storages={this.props.storages} />
             </div>
@@ -101,7 +104,8 @@ class WriteOff extends Component {
                   setState={this.props.actions.setState}
                   mainThings={this.props.mainThings} />
                 <ActTableToolbar
-                  removeActString={this.props.actions.removeActString} />
+                  removeActString={this.props.actions.removeActString}
+                  print={this.props.actions.print} />
             </div>
             <div style={remainsTableStyle}>
                 <RemainsTable
@@ -115,7 +119,8 @@ class WriteOff extends Component {
                   setState={this.props.actions.setState}
                   mainThings={this.props.mainThings}
                   selectedMainThing={this.props.selectedMainThing}
-                  selectedSubdivision={this.props.selectedSubdivision} />
+                  selectedSubdivision={this.props.selectedSubdivision}
+                  selectedActsType={this.props.selectedActsType} />
             </div>
           </div>
         </div>

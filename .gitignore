@@ -2,4 +2,4 @@ env
 __pycache__
 secret.py
 node_modules
-write-off.db
+

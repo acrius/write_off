@@ -8,6 +8,7 @@ from synch_db import update_subdivisions_data, update_storages_data,\
                      update_remains_data, update_main_things_data
 from remains import get_calculated_remains
 from uploads import upload
+from acts import genereate_acts
 
 def get_subdivisions():
     '''
@@ -15,13 +16,13 @@ def get_subdivisions():
     '''
     return dumps(get_data_of_model(Subdivision))
 
-def get_storages_for_subdivision(subdivision_id):
+def get_storages_for_subdivision():
     '''
     Get data of storages for subdivision.
 
     :param subdivision_id: ID of subdivision.
     '''
-    return dumps(get_data_of_model(Storage, filters=Storage.subdivision == subdivision_id))
+    return dumps(get_data_of_model(Storage))
 
 def get_remains_for_storage(storage_id):
     '''
@@ -31,13 +32,13 @@ def get_remains_for_storage(storage_id):
     '''
     return get_calculated_remains(storage_id)
 
-def get_acts_for_storage(storage_id):
+def get_acts_for_storage():
     '''
     Get data of acts for storage.
 
     :param storage_id: ID
     '''
-    return dumps(get_data_of_model(Act, filters=Act.storage == storage_id))
+    return dumps(get_data_of_model(Act))
 
 def get_table_of_acts(act_id):
     '''
@@ -79,13 +80,13 @@ def update_subdivisions():
     '''
     update_subdivisions_data()
 
-def update_storages(subdivision_id):
+def update_storages():
     '''
     View function for update storages.
 
     :param subdivision_id: Id of subdivision of storages.
     '''
-    update_storages_data(subdivision_id)
+    update_storages_data()
 
 def update_remains(storage_id):
     '''
@@ -120,3 +121,6 @@ def upload_acts(acts_ids, storage_id):
     '''
     if acts_ids:
         upload(acts_ids, storage_id)
+
+def genereate_acts_views(subdivision_id):
+    genereate_acts(subdivision_id)

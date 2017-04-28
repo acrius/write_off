@@ -98,14 +98,13 @@ def update_subdivisions_data():
     '''
     update_data(update_data_models=[Subdivision,])
 
-def update_storages_data(subdivision_id):
+def update_storages_data():
     '''
     Update storages data foe subdivision.
 
     :param subdivision_id: ID of subdivision for update data of storages.
     '''
-    update_data(update_data_models=[Storage, ],
-                filters={Storage.__tablename__: Storage.subdivision == subdivision_id})
+    update_data(update_data_models=[Storage, ])
 
 def update_remains_data(storage_id):
     '''

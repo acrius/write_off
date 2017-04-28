@@ -157,6 +157,7 @@ export class ActsActionsToolbar extends Component {
 
   openAct = () => {
     if (this.props.selectedAct !== null) {
+      this.props.getModelData(['remains', ], this.props.selectedActStorage);
       this.props.getModelData('actTable', this.props.selectedAct);
       this.props.setState({openAct: true});
     }
@@ -180,13 +181,17 @@ export class ActsActionsToolbar extends Component {
               onTouchTap={this.props.activateAct} />
             <RaisedButton
               label="Открыть"
-              onTouchTap={this.openAct}/>
+              onTouchTap={this.openAct} />
           </ToolbarGroup>
           <ToolbarGroup>
             <RaisedButton
+              label='Создать акты'
+              secondary={true}
+              onTouchTap={this.props.generateActs} />
+            <RaisedButton
               label="Выгрузить"
               primary={true}
-              onTouchTap={this.openUploadDialog}/>
+              onTouchTap={this.openUploadDialog} />
           </ToolbarGroup>
         </Toolbar>
         <EditActDialog
@@ -199,7 +204,9 @@ export class ActsActionsToolbar extends Component {
           setState={this.props.setState}
           selectedActDateString={this.props.selectedActDateString}
           selectedActDate={this.props.selectedActDate}
-          selectedActsType={this.props.selectedActsType} />
+          selectedActsType={this.props.selectedActsType}
+          selectedActStorage={this.props.selectedActStorage}
+          selectedStorekeeper={this.props.selectedStorekeeper} />
         <Snackbar
           open={this.state.openWarning}
           message="Сначала выберите склад!!!"

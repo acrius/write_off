@@ -11,6 +11,8 @@
       name="viewport"
       content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1, minimum-scale=1"
     >
+    <script src="static/pdfmake.js"></script>
+    <script src="static/vfs_fonts.js"></script>
   </head>
 
   <body>
@@ -22,7 +24,7 @@
       };
       (function() {
         var wf = document.createElement('script');
-        wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+        wf.src = 'static/webfont.js';
         wf.type = 'text/javascript';
         wf.async = 'true';
         var s = document.getElementsByTagName('script')[0];

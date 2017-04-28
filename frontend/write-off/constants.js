@@ -7,8 +7,8 @@ export const GET_SUCCESS = 'GET_SUCCESS';
 
 export const GET_SUBDIVISIONS_QUERY = create_query('subdivisions');
 export const GET_MAIN_THINGS_QUERY = create_query('main_things');
-export const GET_STORAGES_QUERY = create_query('storages') + '/?subdivision=';
-export const GET_ACTS_QUERY = create_query('acts') + '/?storage=';
+export const GET_STORAGES_QUERY = create_query('storages');
+export const GET_ACTS_QUERY = create_query('acts');
 export const GET_ACT_TABLE_QUERY = create_query('act_table') + '/?act=';
 export const GET_REMAINS_QUERY = create_query('remains') + '/?storage=';
 
@@ -23,8 +23,9 @@ export const GET_QUERIES_OF_MODELS = {
 
 export const GET_UPDATED_SUBDIVISIONS_QUERY = create_query('get_updated_subdivisions');
 export const GET_UPDATED_MAIN_THINGS_QUERY = create_query('get_updated_main_things');
-export const GET_UPDATED_STORAGES_QUERY = create_query('get_updated_storages') + '/?subdivision=';
+export const GET_UPDATED_STORAGES_QUERY = create_query('get_updated_storages');
 export const GET_UPDATED_REMAINS_QUERY = create_query('get_updated_remains') + '/?storage=';
+export const GENERATE_ACTS_QUERY = create_query('genereate_acts') + '/?subdivision=';
 
 export const GET_UPDATED_QUERIES_OF_MODELS = {
   subdivisions: GET_UPDATED_SUBDIVISIONS_QUERY,
@@ -54,3 +55,8 @@ export const MOVING_TYPE = 'Перемещение';
 export const ACT_TYPES = [WRITE_OF_TYPE, MOVING_TYPE];
 
 export const WRITE_OFF = 'WRITE_OFF';
+
+export const PRINT_START = 'START_PRINT';
+export const PRINT_SUCCESS = 'PRINT_SUCCESS';
+
+export const STOREKEEPERS = ['Скубиро А.Л.', 'Сучков Д.Ю.']

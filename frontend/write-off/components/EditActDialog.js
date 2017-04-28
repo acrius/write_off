@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import {ReceiverStorageItem} from './SelectableItems';
+import {ReceiverStorageItem, ActStorageItem} from './SelectableItems';
 import Dialog from 'material-ui/Dialog';
 import DatePicker from 'material-ui/DatePicker';
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 
-import {ACT_TYPES, MOVING_TYPE} from '../constants';
+import {ACT_TYPES, MOVING_TYPE, STOREKEEPERS} from '../constants';
 
 export default class EditActDialog extends Component {
   constructor(props) {
@@ -54,6 +56,10 @@ export default class EditActDialog extends Component {
     }
   }
 
+  selectStorekeeper = (event, index) => {
+    this.props.setState({selectedStorekeeper: STOREKEEPERS[index]});
+  }
+
   render() {
     const actions = [
       <FlatButton
@@ -75,6 +81,12 @@ export default class EditActDialog extends Component {
                                         storage.id === this.props.selectedReceiverStorage)[0].name;
     }
 
+    const storekeepers = STOREKEEPERS.map((storekeeper, index) =>
+                                            <MenuItem
+                                              value={storekeeper}
+                                              key={index}
+                                              primaryText={storekeeper} />);
+
     return (
       <div>
         <Dialog
@@ -91,6 +103,18 @@ export default class EditActDialog extends Component {
             onChange={this.selectDate}
             value={this.props.selectedActDate}
             style={{margin: 20}}/>
+          <ActStorageItem
+            storages={this.props.storages}
+            selectedKeys={this.props.selectedActStorage}
+            setState={this.props.setState}
+            getModelData={this.props.getModelData}
+            getModelUpdateData={this.props.getModelUpdateData} />
+          <SelectField
+            value={this.props.selectedStorekeeper}
+            onChange={this.selectStorekeeper}
+            style={{margin: 20}}>
+            {storekeepers}
+          </SelectField>
           {(ACT_TYPES[this.props.selectedActsType] === MOVING_TYPE)  &&
             <div>
               <ReceiverStorageItem

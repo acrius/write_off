@@ -11,13 +11,17 @@ import {GET_REQUEST,
         POST_ACT_ACTIVATE_QUERY,
         POST_ACT_UPLOADS_QUERY,
         POST_ACT_TABLE_QUERY,
+        GENERATE_ACTS_QUERY,
         SET_STATE,
         MOVING_TYPE,
         ACT_TYPES,
         OPEN_ACT,
         CLOSE_ACT,
-        WRITE_OFF} from '../constants';
+        WRITE_OFF,
+        PRINT_START,
+        PRINT_SUCCESS} from '../constants';
 import {load} from '../../utils';
+import {move, write} from './prints';
 
 export function getModelUpdateData(modelsName, queryParam='') {
   return (dispatch) => {
@@ -82,8 +86,10 @@ export function saveAct() {
 
     let actData = {
       date: state.selectedActDateString,
-      storage: state.selectedStorage,
-      act_type: state.selectedActsType
+      storage: state.selectedActStorage,
+      act_type: state.selectedActsType,
+      subdivision: state.selectedSubdivision,
+      storekeeper: state.selectedStorekeeper
     };
 
     if (ACT_TYPES.indexOf(MOVING_TYPE) === actData.act_type) {
@@ -108,7 +114,7 @@ export function saveAct() {
           'body': JSON.stringify(actData)
         }
       ).then(
-        () => {getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts'] + state.selectedStorage);}
+        () => {getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts']);}
       );
     } catch(e) {
       dispatch({
@@ -141,7 +147,9 @@ export function writeOff(amount) {
         name: remain.name,
         account: remain.account,
         amount: amount,
-        main_thing: state.selectedMainThingCode
+        main_thing: state.selectedMainThingCode,
+        unit: remain.unit,
+        unit_code: remain.unitcode
       });
     }
 
@@ -186,7 +194,7 @@ export function saveActTable() {
       ).then(
         () => {
             getModelRequest(dispatch, 'actTable', GET_QUERIES_OF_MODELS['actTable'] + state.selectedAct);
-            getModelRequest(dispatch, 'remains', GET_QUERIES_OF_MODELS['remains'] + state.selectedStorage);
+            getModelRequest(dispatch, 'remains', GET_QUERIES_OF_MODELS['remains'] + state.selectedActStorage);
           }
       );
     } catch(e) {
@@ -217,8 +225,7 @@ export function activateAct() {
           }
         ).then(
           () => {
-            getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts'] + state.selectedStorage);
-            getModelRequest(dispatch, 'remains', GET_QUERIES_OF_MODELS['remains'] + state.selectedStorage);}
+            getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts']);}
         );
       } catch(e) {
         dispatch({
@@ -248,7 +255,7 @@ export function uploadActs() {
         }
       ).then(
         () => {
-          getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts'] + state.selectedStorage);
+          getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts']);
           setStateWithDispatch(dispatch, {uploadComplete: true});
       });
     } catch(e) {
@@ -271,5 +278,51 @@ export function removeActString() {
       });
       getModelRequest(dispatch, 'remains', GET_QUERIES_OF_MODELS['remains'] + state.selectedStorage);
     }
+  }
+}
+
+export function generateActs() {
+  return (dispatch, getState) => {
+    const state = getState().writeOff;
+
+    dispatch({
+      type: GET_REQUEST
+    });
+
+    try {
+      fetch(GENERATE_ACTS_QUERY + state.selectedSubdivision).then(
+        (data) => {
+          {
+            dispatch({
+              type: GET_SUCCESS,
+              payload: {acts: data}
+            });
+          }
+      });
+    } catch(e) {
+      dispatch({
+        type: GET_FAILED,
+        payload: new Error(e)
+      });
+    }
+  }
+}
+
+export function print() {
+  return (dispatch, getState) => {
+    dispatch({
+      type: PRINT_START
+    });
+
+    const state = getState().writeOff;
+    if (state.selectedActsType == 1) {
+      move(state);
+    } else {
+      write(state);
+    }
+
+    dispatch({
+      type: PRINT_SUCCESS
+    });
   }
 }

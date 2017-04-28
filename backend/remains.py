@@ -7,12 +7,11 @@ from models import Act, Remain, ActTable, Storage, Subdivision, DATABASES
 from serializer import dumps
 
 def get_calculated_remains(storage_id):
-    upgrade_date = get_upgrade_date(storage_id)
     remains = dumps(get_data_of_model(Remain, filters=Remain.storage == storage_id))
     acts = dumps(get_data_of_model(Act, filters=(and_(Act.storage == storage_id,
-                                                      Act.is_active == True))))
-    acts = [{**act, 'date': get_date_from_string(act['date'])} for act in acts]
-    acts = [act['id'] for act in acts if act['date'] > upgrade_date]
+                                                       Act.is_active == True,
+                                                       Act.is_upload == False))))
+    acts = map(lambda act: act['id'], acts)
     acts_strings = dumps(get_data_of_model(ActTable, filters=ActTable.act.in_(acts)))
     return calculate_remains(remains, acts_strings)
 
@@ -30,6 +29,6 @@ def get_date_from_string(date_string):
 
 def calculate_remains(remains, acts):
     return list(filter(lambda remain: float(remain['amount']) != 0,
-                       [{**remain, 'amount': str(float(remain['amount']) - sum([float(act['amount'])\
-                        for act in acts if act['code'] == remain['code']]))}\
+                       [{**remain, 'amount': str(round(float(remain['amount']) - sum([float(act['amount'])\
+                        for act in acts if act['code'] == remain['code']]), 2))}\
                         for remain in remains]))

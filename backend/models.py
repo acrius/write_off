@@ -39,6 +39,7 @@ class Remain(DATABASES['main']): #pylint: disable=R0903
     code = Column(String(length=15))
     name = Column(String(length=255))
     unit = Column(String(length=10))
+    unitcode = Column(String(length=15))
     sum = Column(String(length=35))
     amount = Column(String(length=35))
 
@@ -58,12 +59,16 @@ class Act(DATABASES['main']): #pylint: disable=R0903
     '''
     __tablename__ = 'acts'
     id = Column(Integer, primary_key=True) #pylint: disable=C0103
+    parent_act = Column(Integer, ForeignKey('acts.id'))
+#    _parent = relationship('Act', remote_side=[id])
     date = Column(String(length=8))
     storage = Column(Integer, ForeignKey('storages.id'))
     receiver_storage = Column(Integer, ForeignKey('storages.id'))
     act_type = Column(Integer)
+    storekeeper = Column(String(length=200))
     is_active = Column(Boolean, default=False)
     is_upload = Column(Boolean, default=False)
+    subdivision = Column(Integer, ForeignKey('subdivisions.id'))
 
 class ActTable(DATABASES['main']): #pylint: disable=R0903
     '''
@@ -71,6 +76,7 @@ class ActTable(DATABASES['main']): #pylint: disable=R0903
     '''
     __tablename__ = 'tables_from_acts'
     id = Column(Integer, primary_key=True) #pylint: disable=C0103
+    dateWriteOff = Column(String(length=8))
     act = Column(Integer, ForeignKey('acts.id'))
     code = Column(String(length=15))
     name = Column(String(length=255))
@@ -78,6 +84,9 @@ class ActTable(DATABASES['main']): #pylint: disable=R0903
     main_thing = Column(String(length=8))
     amount = Column(String(length=25))
     date_of_write_off = Column(String(length=8))
+    unit = Column(String(10))
+    unit_code = Column(String(15))
+    act_relation = relationship('Act')
 
 class OutAct(DATABASES['outside']): #pylint: disable=R0903
     '''
