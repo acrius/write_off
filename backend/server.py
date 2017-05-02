@@ -128,7 +128,7 @@ def genereate_acts(request):
     subdivision_id = request.args.get('subdivision')
     if subdivision_id is not None:
         genereate_acts_views(subdivision_id)
-    return json(get_acts_for_storage())
+        return json(get_acts_for_storage())
 
 @app.route('/api/v01/activate_act', methods=['POST'])
 def activate_act_api(request):

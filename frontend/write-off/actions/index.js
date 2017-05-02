@@ -290,14 +290,12 @@ export function generateActs() {
     });
 
     try {
-      fetch(GENERATE_ACTS_QUERY + state.selectedSubdivision).then(
+      load(GENERATE_ACTS_QUERY + state.selectedSubdivision).then(
         (data) => {
-          {
             dispatch({
               type: GET_SUCCESS,
               payload: {acts: data}
             });
-          }
       });
     } catch(e) {
       dispatch({
