@@ -11,7 +11,6 @@ export class RemainsTable extends Component {
       <DataTable
         dataSource={this.props.remains}
         viewsFields={{
-          account: 'Счет',
           code: 'Код',
           name: 'Наименование',
           amount: 'Количество'

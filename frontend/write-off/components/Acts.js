@@ -12,7 +12,7 @@ export class Acts extends Component {
 
       if (act.date) {
         const dateArray = act.date.split('.');
-        const date = new Date(dateArray[2], dateArray[1] - 1, dateArray[0]);
+        const date = new Date('20' + dateArray[2], dateArray[1] - 1, dateArray[0]);
         this.props.setState({selectedActDate: date});
       }
 
