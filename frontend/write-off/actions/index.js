@@ -125,7 +125,7 @@ export function saveAct() {
   };
 }
 
-export function writeOff(amount) {
+export function writeOff(amount, selectedWorkName) {
   return (dispatch, getState) => {
     const state = getState().writeOff;
     const remain = state.remains.filter((remain) => remain.id === state.selectedRemain)[0];
@@ -134,7 +134,7 @@ export function writeOff(amount) {
 
     let actTable = state.actTable.map((act) => {
       let newAct = act;
-      if (newAct.code == remain.code && newAct.main_thing == state.selectedMainThingCode) {
+      if (newAct.code == remain.code && newAct.main_thing == state.selectedMainThingCode && newAct.work_name == selectedWorkName) {
         newAct.amount = parseFloat(newAct.amount) + parseFloat(amount);
         append = true;
       }
@@ -149,7 +149,8 @@ export function writeOff(amount) {
         amount: amount,
         main_thing: state.selectedMainThingCode,
         unit: remain.unit,
-        unit_code: remain.unitcode
+        unit_code: remain.unitcode,
+        work_name: selectedWorkName
       });
     }
 
@@ -171,10 +172,13 @@ export function saveActTable() {
 
     const state = getState().writeOff;
 
+    const currentDate = new Date();
+
     const actTable = state.actTable.map((actString) => {
       return {
         ...actString,
-        act: state.selectedAct
+        act: state.selectedAct,
+        time: actString.time ? actString.time : '' + currentDate.getHours() + ':' + currentDate.getMinutes()
       };
     });
 
@@ -276,7 +280,7 @@ export function removeActString() {
           actString.code !== state.selectedActString
         )
       });
-      getModelRequest(dispatch, 'remains', GET_QUERIES_OF_MODELS['remains'] + state.selectedStorage);
+      getModelRequest(dispatch, 'remains', GET_QUERIES_OF_MODELS['remains'] + state.selectedActStorage);
     }
   }
 }

@@ -76,7 +76,6 @@ class ActTable(DATABASES['main']): #pylint: disable=R0903
     '''
     __tablename__ = 'tables_from_acts'
     id = Column(Integer, primary_key=True) #pylint: disable=C0103
-    dateWriteOff = Column(String(length=8))
     act = Column(Integer, ForeignKey('acts.id'))
     code = Column(String(length=15))
     name = Column(String(length=255))
@@ -84,6 +83,8 @@ class ActTable(DATABASES['main']): #pylint: disable=R0903
     main_thing = Column(String(length=8))
     amount = Column(String(length=25))
     date_of_write_off = Column(String(length=8))
+    time = Column(String(length=5))
+    work_name = Column(String(length=200))
     unit = Column(String(10))
     unit_code = Column(String(15))
     act_relation = relationship('Act')

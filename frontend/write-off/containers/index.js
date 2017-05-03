@@ -87,6 +87,7 @@ class WriteOff extends Component {
                 selectedActDate={this.props.selectedActDate}
                 selectedActDateString={this.props.selectedActDateString}
                 selectedStorage={this.props.selectedStorage}
+                selectedSubdivision={this.props.selectedSubdivision}
                 selectedActsType={this.props.selectedActsType}
                 selectedUploadActs={this.props.selectedUploadActs}
                 selectedActStorage={this.props.selectedActStorage}
@@ -120,7 +121,8 @@ class WriteOff extends Component {
                   mainThings={this.props.mainThings}
                   selectedMainThing={this.props.selectedMainThing}
                   selectedSubdivision={this.props.selectedSubdivision}
-                  selectedActsType={this.props.selectedActsType} />
+                  selectedActsType={this.props.selectedActsType}
+                  selectedRemain={this.props.selectedRemain} />
             </div>
           </div>
         </div>

@@ -16,6 +16,7 @@ const selectedFields = {
   selectedActsType: 0,
   selectedAct: null,
   selectedActString: null,
+  selectedWorkName: '',
   selectedActDate: null,
   selectedActDateString: null,
   selectedRemain: null,

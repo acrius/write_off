@@ -128,7 +128,11 @@ export class ActsActionsToolbar extends Component {
   }
 
   openUploadDialog = () => {
-    this.setState({openUploadDialog: true});
+    if (this.props.selectedStorage === null || this.props.selectedSubdivision === null) {
+      this.openWarning();
+    } else {
+      this.setState({openUploadDialog: true});
+    }
   }
 
   closeUploadDialog = () => {
@@ -136,7 +140,7 @@ export class ActsActionsToolbar extends Component {
   }
 
   openAppendDialog = () => {
-    if (this.props.selectedStorage === null) {
+    if (this.props.selectedStorage === null || this.props.selectedSubdivision === null) {
       this.openWarning();
     } else {
       this.setState({openAppendDialog: true});
@@ -156,15 +160,32 @@ export class ActsActionsToolbar extends Component {
   }
 
   openAct = () => {
-    if (this.props.selectedAct !== null) {
-      this.props.getModelData(['remains', ], this.props.selectedActStorage);
-      this.props.getModelData('actTable', this.props.selectedAct);
-      this.props.setState({openAct: true});
+    if (this.props.selectedStorage === null || this.props.selectedSubdivision === null) {
+      this.openWarning();
+    } else {
+      if (this.props.selectedAct !== null) {
+        this.props.getModelData(['remains', ], this.props.selectedActStorage);
+        this.props.getModelData('actTable', this.props.selectedAct);
+        this.props.setState({openAct: true});
+      }
+    }
+  }
+
+  generateActs = () => {
+    if (this.props.selectedStorage === null || this.props.selectedSubdivision === null) {
+      this.openWarning();
+    } else {
+      this.props.generateActs();
     }
   }
 
   render() {
-    const label = 'Активировать';
+    let label = 'Активировать';
+    if (this.props.selectedAct !== null)
+    {
+      const selectedAct = this.props.acts.filter((act) => act.id === this.props.selectedAct)[0];
+      label = selectedAct.is_active && !selectedAct.is_upload ? 'Декативировать' : 'Активировать';
+    }
     const appendLabel = this.props.selectedAct === null ? 'Добавить' : 'Изменить';
 
     return (
@@ -187,7 +208,7 @@ export class ActsActionsToolbar extends Component {
             <RaisedButton
               label='Создать акты'
               secondary={true}
-              onTouchTap={this.props.generateActs} />
+              onTouchTap={this.generateActs} />
             <RaisedButton
               label="Выгрузить"
               primary={true}
@@ -209,7 +230,7 @@ export class ActsActionsToolbar extends Component {
           selectedStorekeeper={this.props.selectedStorekeeper} />
         <Snackbar
           open={this.state.openWarning}
-          message="Сначала выберите склад!!!"
+          message="Сначала выберите подразделение и склад!!!"
           action="Закрыть"
           autoHideDuration={3000}
           onActionTouchTap={this.closeWarning}

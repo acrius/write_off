@@ -28,7 +28,7 @@ def _get_act_rows(act, act_rows):
     return list(filter(lambda row: row['act'] == act['id'], act_rows))
 
 def _get_new_row(act_row):
-    return {key: value for key, value in act_row.items() if key != 'id' and key != 'dateWriteOff'}
+    return {key: value for key, value in act_row.items() if key != 'id' and key != 'date_of_write_off'}
 
 def genereate_acts(subdivision_id):
     '''
@@ -45,7 +45,7 @@ def genereate_acts(subdivision_id):
             new_act = _create_new_act(act)
             new_acts.append(new_act)
         for act_row in _get_act_rows(act, act_rows):
-            new_row = ActTable(act_relation=new_act, dateWriteOff=act['date'],
+            new_row = ActTable(act_relation=new_act, date_of_write_off=act['date'],
                                **_get_new_row(act_row))
             new_acts_rows.append(new_row)
     session.add_all(new_acts)

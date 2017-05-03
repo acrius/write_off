@@ -87,6 +87,14 @@ export function move(state) {
     },
     pageSize: 'A4',
     pageMargins: [20, 30, 40, 20],
+    footer: (currentPage, pageCount) => {
+      return {
+        text: 'Стр. ' + currentPage.toString() + ' из ' + pageCount.toString(),
+        alignment: 'right',
+        fontSize: 8,
+        margin: [0, 0, 20, 0]
+      };
+    },
     content: [
       {
         text: 'Типовая межотраслевая форма № М-11',
@@ -325,13 +333,22 @@ export function write(state) {
     {text: 'Сумма', fontSize: 8}, {text: 'Водитель / Слесарь подпись', fontSize: 8}]];
 
   const tableBody = state.actTable.map(
-    (row) => [{text: row.dateWriteOff, fontSize: 8}, {text: ' ', fontSize: 8},
-              {text: ' ', fontSize: 8}, {text: row.code, fontSize: 8},
+    (row) => [{text: row.date_of_write_off, fontSize: 8}, {text: row.time, fontSize: 8},
+              {text: row.work_name, fontSize: 8}, {text: row.code, fontSize: 8},
               {text: row.name, fontSize: 8}, {text: row.account, fontSize: 8},
               {text: row.amount, fontSize: 8}, {text: ' ', fontSize: 8},
               {text: ' ', fontSize: 8}, {text: ' ', fontSize: 8}]);
 
   const table = tableHead.concat(tableBody);
+
+  const committee = [
+    {post: 'Заведующая складом', name: 'Казимирова Л.А.'},
+    {post: 'Главный бухгалтер', name: 'Фомина Л.Е.'},
+    {post: 'Начальник АТЦ', name: 'Лапин А.С.'},
+    {post: 'Инженер-механик по автотранспорту', name: 'Лукашевич Е.А.'},
+    {post: 'Менеждер по снабжению', name: 'Асташкин А.В.'},
+    {post: 'Механик', name: '____________________'}
+    ];
 
   var doc = {
     info: {
@@ -340,6 +357,14 @@ export function write(state) {
     pageSize: 'A4',
     pageOrientation: 'landscape',
     pageMargins: [20, 30, 40, 20],
+    footer: (currentPage, pageCount) => {
+      return {
+        text: 'Стр. ' + currentPage.toString() + ' из ' + pageCount.toString(),
+        alignment: 'right',
+        fontSize: 8,
+        margin: [0, 0, 20, 0]
+      };
+    },
     content: [
       {
         columns: [
@@ -397,53 +422,13 @@ export function write(state) {
         fontSize: 12,
         margin: [40, 20]
       },
-      {
-        columns: [
-          {text: 'Заведующая складом', fontSize: 10, alignment: 'right'},
-          {text: '____________________________________________', fontSize: 10, alignment: 'center'},
-          {text: '/Казимирова Л.А./', fontSize: 10, alignment: 'left'},
-        ],
-      },
-      {
-        columns: [
-          {text: 'Главный бухгалтер', fontSize: 10, alignment: 'right'},
-          {text: '____________________________________________', fontSize: 10, alignment: 'center'},
-          {text: '/Фомина Л.Е./', fontSize: 10, alignment: 'left'},
-        ],
-        alignment: 'center'
-      },
-      {
-        columns: [
-          {text: 'Начальник АТЦ', fontSize: 10, alignment: 'right'},
-          {text: '____________________________________________', fontSize: 10, alignment: 'center'},
-          {text: '/Лапин А.С./', fontSize: 10, alignment: 'left'},
-        ],
-        alignment: 'center'
-      },
-      {
-        columns: [
-          {text: 'Инженер-механик по автотранспорту', fontSize: 10, alignment: 'right'},
-          {text: '____________________________________________', fontSize: 10, alignment: 'center'},
-          {text: '/Лукашевич Е.А./', fontSize: 10, alignment: 'left'},
-        ],
-        alignment: 'center'
-      },
-      {
-        columns: [
-          {text: 'Менеждер по снабжению', fontSize: 10, alignment: 'right'},
-          {text: '____________________________________________', fontSize: 10, alignment: 'center'},
-          {text: '/Асташкин А.В./', fontSize: 10, alignment: 'left'},
-        ],
-        alignment: 'center'
-      },
-      {
-        columns: [
-          {text: 'Механик', fontSize: 10, alignment: 'right'},
-          {text: '____________________________________________', fontSize: 10, alignment: 'center'},
-          {text: '/____________________/', fontSize: 10, alignment: 'left'},
-        ],
-        alignment: 'center'
-      }
+      [
+      ...committee.map((employee) => {
+        return {columns: [
+            {text: employee.post, fontSize: 10, alignment: 'right'},
+            {text: '____________________________________________', fontSize: 10, alignment: 'center'},
+            {text: '/' + employee.name + '/', fontSize: 10, alignment: 'left'},
+          ], alignment: 'center'};}), ]
     ]
   };
 

@@ -4,13 +4,16 @@ import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import Snackbar from 'material-ui/Snackbar';
 import {MainThingItem} from './SelectableItems';
 
 export class RemainsToolbar extends Component {
   constructor(props) {
     super(props);
     this.state = {openWriteOffDialog: false,
-                  amount: 0};
+                  amount: 0,
+                  selectedWorkName: '',
+                  openWarning: false};
   }
 
   getModelUpdateData = () => {
@@ -18,12 +21,16 @@ export class RemainsToolbar extends Component {
   }
 
   writeOff = () => {
-    this.props.writeOff(Number(this.state.amount));
+    this.props.writeOff(Number(this.state.amount), this.state.selectedWorkName);
     this.closeWriteOffDialog();
   }
 
   openWriteOffDialog = () => {
-    this.setState({openWriteOffDialog: true});
+    if (this.props.selectedRemain === null) {
+      this.setState({openWarning: true});
+    } else {
+      this.setState({openWriteOffDialog: true});
+    }
   }
 
   closeWriteOffDialog = () => {
@@ -32,6 +39,14 @@ export class RemainsToolbar extends Component {
 
   onChange = (event, value) => {
     this.setState({amount: parseFloat(value)});
+  }
+
+  setSelectedWork = (event, value) => {
+    this.setState({selectedWorkName: value});
+  }
+
+  closeWarning = () => {
+    this.setState({openWarning: false});
   }
 
   render() {
@@ -51,6 +66,12 @@ export class RemainsToolbar extends Component {
         hintText="Количество"
         type="number"
         onChange={this.onChange}
+        style={{margin: 20}} />,
+      <TextField
+        hintText="Наименование работы"
+        type="text"
+        onChange={this.setSelectedWork}
+        value={this.state.selectedWorkName}
         style={{margin: 20}} />];
 
     if (this.props.selectedActsType === 0) {
@@ -77,6 +98,13 @@ export class RemainsToolbar extends Component {
               onTouchTap={this.getModelUpdateData}/>
           </ToolbarGroup>
         </Toolbar>
+        <Snackbar
+          open={this.state.openWarning}
+          message="Выберете остаток для списания!!!"
+          action="Закрыть"
+          autoHideDuration={3000}
+          onActionTouchTap={this.closeWarning}
+          onRequestClose={this.closeWarning} />
         <Dialog
           open={this.state.openWriteOffDialog}
           title="Введите количество"

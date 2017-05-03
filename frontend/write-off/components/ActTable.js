@@ -24,8 +24,7 @@ export class ActTable extends Component {
         viewsFields={{
           code: 'Код',
           name: 'Наименование',
-          account: 'Счет',
-          main_thing: 'Основное средство',
+          work_name: 'Работа',
           amount: 'Количество'
         }}
         keyField="code"

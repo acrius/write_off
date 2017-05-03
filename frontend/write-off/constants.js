@@ -1,4 +1,4 @@
-const HOST_API = 'http://127.0.0.1:8000/';
+const HOST_API = '/';
 const create_query = (target) => HOST_API + 'api/v01/' + target;
 
 export const GET_REQUEST = 'GET_REQUEST';
