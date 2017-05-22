@@ -402,7 +402,7 @@ export function write(state) {
         ]
       },
       {
-        text: 'ВЕДОМОСТЬ УЧЕТА РЕМОНТНЫХ РАБОТ И ИСПОЛЬЗОВАНИЯ ЗАПАСНЫХ ЧАСТЕЙ',
+        text: 'ВЕДОМОСТЬ УЧЕТА РЕМОНТНЫХ РАБОТ И ИСПОЛЬЗОВАНИЯ ЗАПАСНЫХ ЧАСТЕЙ №' + state.selectedAct,
         alignment: 'center',
         fontSize: 12,
         margin: [0, 20]
