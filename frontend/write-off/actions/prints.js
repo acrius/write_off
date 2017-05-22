@@ -333,11 +333,14 @@ export function write(state) {
     {text: 'Сумма', fontSize: 8}, {text: 'Водитель / Слесарь подпись', fontSize: 8}]];
 
   const tableBody = state.actTable.map(
-    (row) => [{text: row.date_of_write_off, fontSize: 8}, {text: row.time, fontSize: 8},
+    (row) => {
+      const date_of_write_off = 'date_of_write_off' in row && row.date_of_write_off ? row.date_of_write_off : state.selectedActDateString;
+      return [{text: date_of_write_off, fontSize: 8}, {text: row.time, fontSize: 8},
               {text: row.work_name, fontSize: 8}, {text: row.code, fontSize: 8},
               {text: row.name, fontSize: 8}, {text: row.account, fontSize: 8},
               {text: row.amount, fontSize: 8}, {text: ' ', fontSize: 8},
-              {text: ' ', fontSize: 8}, {text: ' ', fontSize: 8}]);
+              {text: ' ', fontSize: 8}, {text: ' ', fontSize: 8}];
+            });
 
   const table = tableHead.concat(tableBody);
 

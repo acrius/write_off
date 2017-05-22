@@ -20,7 +20,7 @@ import {GET_REQUEST,
         WRITE_OFF,
         PRINT_START,
         PRINT_SUCCESS} from '../constants';
-import {load} from '../../utils';
+import {load, getFormatDate} from '../../utils';
 import {move, write} from './prints';
 
 export function getModelUpdateData(modelsName, queryParam='') {
@@ -178,7 +178,8 @@ export function saveActTable() {
       return {
         ...actString,
         act: state.selectedAct,
-        time: actString.time ? actString.time : '' + currentDate.getHours() + ':' + currentDate.getMinutes()
+        time: actString.time ? actString.time : '' + currentDate.getHours() + ':' + currentDate.getMinutes(),
+        date_of_write_off: actString.date_of_write_off ? actString.date_of_write_off : getFormatDate(currentDate)
       };
     });
 
