@@ -114,6 +114,21 @@ export default class DataTable extends Component {
     return viewsFields;
   }
 
+  getWidth = (columnName) => {
+    let width = 'auto';
+    const widths = {
+      code: '70',
+      amount: '70',
+      work_name: '250'
+    };
+
+    if (columnName in widths) {
+      width = widths[columnName];
+    }
+
+    return width;
+  }
+
   render() {
     const viewsFields = Object.keys(this.props.viewsFields).length > 0 ? this.props.viewsFields : this.getViewsFields();
 
@@ -126,8 +141,11 @@ export default class DataTable extends Component {
           adjustForCheckbox={false}
           displaySelectAll={false}>
           <TableRow>
-            {Object.keys(viewsFields).map((key, index) =>
-              <TableHeaderColumn key={index}>{viewsFields[key]}</TableHeaderColumn>)}
+            {Object.keys(viewsFields).map((key, index) => {
+              const columnStyle = {
+                width: this.getWidth(key)
+              };
+              return <TableHeaderColumn style={columnStyle} key={index}>{viewsFields[key]}</TableHeaderColumn>})}
           </TableRow>
         </TableHeader>
         <TableBody
@@ -148,8 +166,13 @@ export default class DataTable extends Component {
               return (
                 <TableRow key={index} selected={this.state.selectedRows.indexOf(index) !== -1}
                   style={style}>
-                  {Object.keys(viewsFields).map((key, index) =>
-                    <TableRowColumn key={index}>{data[key]}</TableRowColumn>)}
+                  {Object.keys(viewsFields).map((key, index) =>{
+                    const columnStyle = {
+                      width: this.getWidth(key),
+                      whiteSpace: 'normal',
+                      wordWrap: 'break-word'
+                    };
+                    return <TableRowColumn style={columnStyle} key={index}>{data[key]}</TableRowColumn>})}
                 </TableRow>)})}
         </TableBody>
       </Table>
