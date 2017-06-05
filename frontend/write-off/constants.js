@@ -59,4 +59,4 @@ export const WRITE_OFF = 'WRITE_OFF';
 export const PRINT_START = 'START_PRINT';
 export const PRINT_SUCCESS = 'PRINT_SUCCESS';
 
-export const STOREKEEPERS = ['Скубиро А.Л.', 'Сучков Д.Ю.']
+export const STOREKEEPERS = ['Донец Д.Н.', 'Сучков Д.Ю.']

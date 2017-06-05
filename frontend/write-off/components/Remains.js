@@ -13,6 +13,7 @@ export class RemainsTable extends Component {
         viewsFields={{
           code: 'Код',
           name: 'Наименование',
+          unit: 'Ед.изм.',
           amount: 'Количество'
         }}
         selectedKeys={this.props.selectedRemain}

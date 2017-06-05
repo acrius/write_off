@@ -119,7 +119,8 @@ export default class DataTable extends Component {
     const widths = {
       code: '70',
       amount: '70',
-      work_name: '250'
+      work_name: '250',
+      unit: '70'
     };
 
     if (columnName in widths) {

@@ -16,6 +16,8 @@ from views import get_subdivisions, get_storages_for_subdivision,\
                   get_main_things, update_main_things, activate_act,\
                   upload_acts, genereate_acts_views
 
+from tasks import change_storekeeper
+
 path.append(settings.PROJECT_PATH)
 
 app = Sanic() #pylint: disable-msg=C0103
@@ -151,4 +153,5 @@ def upload_acts_api(request):
         return json(True)
 
 if __name__ == '__main__':
+    change_storekeeper()
     app.run(host=settings.HOST['address'], port=settings.HOST['port'])

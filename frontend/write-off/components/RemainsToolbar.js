@@ -21,8 +21,11 @@ export class RemainsToolbar extends Component {
   }
 
   writeOff = () => {
-    this.props.writeOff(Number(this.state.amount), this.state.selectedWorkName);
-    this.closeWriteOffDialog();
+    const amount = Number(this.state.amount);
+    if (!isNaN(amount) && amount != 0) {
+      this.props.writeOff(amount, this.state.selectedWorkName);
+      this.closeWriteOffDialog();
+    }
   }
 
   openWriteOffDialog = () => {
