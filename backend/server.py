@@ -153,5 +153,5 @@ def upload_acts_api(request):
         return json(True)
 
 if __name__ == '__main__':
-    change_storekeeper()
+    #change_storekeeper()
     app.run(host=settings.HOST['address'], port=settings.HOST['port'])
