@@ -114,7 +114,7 @@ class WriteOff extends Component {
                   selectedRemain={this.props.selectedRemain}
                   setState={this.props.actions.setState} />
                 <RemainsToolbar
-                  selectedStorage={this.props.selectedStorage}
+                  selectedStorage={this.props.selectedActStorage}
                   getModelUpdateData={this.props.actions.getModelUpdateData}
                   writeOff={this.props.actions.writeOff}
                   setState={this.props.actions.setState}
