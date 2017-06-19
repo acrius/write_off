@@ -36,7 +36,7 @@ export function move(state) {
     {text: 'Количество', colSpan: 2, rowSpan: 1}, {},
     {text: 'Цена, руб. коп.', colSpan: 1, rowSpan: 2},
     {text: 'Сумма без учета НДС, руб. коп.', colSpan: 1, rowSpan: 2},
-    {text: 'Порядковый номер по складской картотеке', colSpan: 1, rowSpan: 2}],
+    {text: 'Наименование работы', colSpan: 1, rowSpan: 2}],
   [
     {text: 'Счет', colSpan: 1, rowSpan: 1}, {text: 'Код аналити- ческого учета', colSpan: 1, rowSpan: 1},
     {text: 'Наименование', colSpan: 1, rowSpan: 1}, {text: 'Номенклатурный номер', colSpan: 1, rowSpan: 1},
@@ -65,7 +65,7 @@ export function move(state) {
       {text: act.amount, colSpan: 1, rowSpan: 1},
       {text: '           ', colSpan: 1, rowSpan: 1},
       {text: '           ', colSpan: 1, rowSpan: 1},
-      {text: ' ', colSpan: 1, rowSpan: 1}
+      {text: act.work_name, colSpan: 1, rowSpan: 1}
     ]
   );
 
