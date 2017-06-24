@@ -53,20 +53,34 @@ export function move(state) {
     {text: '11', colSpan: 1, rowSpan: 1},
   ]];
 
-  const moveTable = state.actTable.map(act =>
-    [
-      {text: act.account, colSpan: 1, rowSpan: 1},
-      {text: ' ', colSpan: 1, rowSpan: 1},
-      {text: act.name, colSpan: 1, rowSpan: 1},
-      {text: act.code, colSpan: 1, rowSpan: 1},
-      {text: act.unit_code, colSpan: 1, rowSpan: 1},
-      {text: act.unit, colSpan: 1, rowSpan: 1},
-      {text: act.amount, colSpan: 1, rowSpan: 1},
-      {text: act.amount, colSpan: 1, rowSpan: 1},
-      {text: '           ', colSpan: 1, rowSpan: 1},
-      {text: '           ', colSpan: 1, rowSpan: 1},
-      {text: act.work_name, colSpan: 1, rowSpan: 1}
-    ]
+  const moveTable = state.actTable.map(act => {
+      const work_name = act.work_name;
+      let new_work_name = '';
+      if (work_name) {
+        for (var i = 0; i < work_name.length; i++) {
+          new_work_name += work_name[i];
+
+          if (i % 10 == 0) {
+            new_work_name += ' ';
+          }
+        }
+      } else {
+        new_work_name = work_name;
+      }
+      return [
+        {text: act.account, colSpan: 1, rowSpan: 1},
+        {text: ' ', colSpan: 1, rowSpan: 1},
+        {text: act.name, colSpan: 1, rowSpan: 1},
+        {text: act.code, colSpan: 1, rowSpan: 1},
+        {text: act.unit_code, colSpan: 1, rowSpan: 1},
+        {text: act.unit, colSpan: 1, rowSpan: 1},
+        {text: act.amount, colSpan: 1, rowSpan: 1},
+        {text: act.amount, colSpan: 1, rowSpan: 1},
+        {text: '           ', colSpan: 1, rowSpan: 1},
+        {text: '           ', colSpan: 1, rowSpan: 1},
+        {text: new_work_name, colSpan: 1, rowSpan: 1}
+      ];
+    }
   );
 
   let amountSum = 0;
@@ -187,8 +201,8 @@ export function move(state) {
           },
           fontSize: 8,
           alignment: 'center',
-          margin: [0, 10, 30, 0],
-          width: 600
+          widths: [ '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*'],
+          margin: [0, 10, 30, 0]
         },
         {
           columns: [
