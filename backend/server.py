@@ -14,9 +14,12 @@ from views import get_subdivisions, get_storages_for_subdivision,\
                   get_table_of_acts, save_act, save_act_table,\
                   update_subdivisions, update_storages, update_remains,\
                   get_main_things, update_main_things, activate_act,\
-                  upload_acts, genereate_acts_views
+                  upload_acts, genereate_acts_views, get_storekeepers,\
+                  append_storekeeper, delete_storekeeper
 
 from tasks import change_storekeeper
+
+from migrate import migrate
 
 path.append(settings.PROJECT_PATH)
 
@@ -57,7 +60,9 @@ def get_or_post_acts(request):
     Get or post acts of storage with rest-api.
     '''
     if request.method == 'GET':
-        return json(get_acts_for_storage())
+        count = request.args.get('count')
+        act_type = request.args.get('act_type')
+        return json(get_acts_for_storage(count, act_type))
     elif request.method == 'POST':
         return json(save_act(request.json))
 
@@ -152,6 +157,19 @@ def upload_acts_api(request):
         upload_acts(request.json, storage_id)
         return json(True)
 
+@app.route('/api/v01/storekeepers', methods=['GET', 'POST', 'DELETE'])
+def get_or_post_storekeepers_api(request):
+    print(request.method)
+    if request.method == 'GET':
+        return json(get_storekeepers())
+    elif request.method == 'POST':
+        return json(append_storekeeper(request.json))
+    elif request.method == 'DELETE':
+        storekeeper_name = request.args.get('storekeeper_name')
+        if storekeeper_name is not None:
+            return json(delete_storekeeper(storekeeper_name))
+
 if __name__ == '__main__':
     #change_storekeeper()
+    migrate()
     app.run(host=settings.HOST['address'], port=settings.HOST['port'])

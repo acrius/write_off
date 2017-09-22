@@ -11,6 +11,7 @@ export const GET_STORAGES_QUERY = create_query('storages');
 export const GET_ACTS_QUERY = create_query('acts');
 export const GET_ACT_TABLE_QUERY = create_query('act_table') + '/?act=';
 export const GET_REMAINS_QUERY = create_query('remains') + '/?storage=';
+export const GET_STOREKEEPER_QUERY = create_query('storekeepers');
 
 export const GET_QUERIES_OF_MODELS = {
   subdivisions: GET_SUBDIVISIONS_QUERY,
@@ -18,7 +19,8 @@ export const GET_QUERIES_OF_MODELS = {
   storages: GET_STORAGES_QUERY,
   acts: GET_ACTS_QUERY,
   actTable: GET_ACT_TABLE_QUERY,
-  remains: GET_REMAINS_QUERY
+  remains: GET_REMAINS_QUERY,
+  storekeepers: GET_STOREKEEPER_QUERY
 };
 
 export const GET_UPDATED_SUBDIVISIONS_QUERY = create_query('get_updated_subdivisions');
@@ -39,16 +41,26 @@ export const POST_FAILED = 'POST_FAILED';
 
 export const POST_ACT_SUCCESS = 'POST_ACT_SUCCESS';
 export const POST_ACT_TABLE_SUCCESS = 'POST_ACT_TABLE_SUCCESS';
+export const POST_STOREKEEPER_SUCCESS = 'POST_STOREKEEPER_SUCCESS';
 
 export const SET_STATE = 'SET_STATE';
 
 export const OPEN_ACT = 'OPEN_ACT';
 export const CLOSE_ACT = 'CLOSE_ACT';
+export const SHOW_ACTS = 'SHOW_ACTS';
 
 export const POST_ACT_QUERY = create_query('acts');
 export const POST_ACT_TABLE_QUERY = create_query('act_table') + '/?act=';
 export const POST_ACT_ACTIVATE_QUERY = create_query('activate_act') + '/?act=';
 export const POST_ACT_UPLOADS_QUERY = create_query('upload_acts') + '/?storage=';
+export const POST_STOREKEEPER_QUERY = create_query('storekeepers');
+
+export const DELETE_REQUEST = 'DELETE_REQUEST';
+export const DELETE_FAILED = 'DELETE_FAILED';
+
+export const DELETE_STOREKEEPER_SUCCESS = 'DELETE_STOREKEEPER_SUCCESS';
+
+export const DELETE_STOREKEEPER_QUERY = create_query('storekeepers') + '/?storekeeper_name=';
 
 export const WRITE_OF_TYPE = 'Списание';
 export const MOVING_TYPE = 'Перемещение';
@@ -58,5 +70,3 @@ export const WRITE_OFF = 'WRITE_OFF';
 
 export const PRINT_START = 'START_PRINT';
 export const PRINT_SUCCESS = 'PRINT_SUCCESS';
-
-export const STOREKEEPERS = ['Донец Д.Н.', 'Сучков Д.Ю.']

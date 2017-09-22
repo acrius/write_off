@@ -5,15 +5,17 @@ Module support Integer and String types.
 '''
 from collections import Iterable, Mapping
 
-def dumps(sa_data):
+def dumps(sa_data, count=0):
     '''
     Dumps :sqlalchemy: data to python collections.
     Return python collections.
 
     :param sa_data: :sqlalchemy: object of declarative model or query result.
+    :param count: count of last elements of list.
     '''
     if isinstance(sa_data, Iterable):
-        return [_dump(sa_object) for sa_object in sa_data]
+        return [_dump(sa_object) for sa_object in sa_data][-count:] \
+               if count else [_dump(sa_object) for sa_object in sa_data]
     else:
         return _dump(sa_data)
 

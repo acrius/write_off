@@ -15,7 +15,7 @@ def get_database(echo=False, **settings):
     '''
     return declarative_base(bind=create_engine(URL(**settings), echo=echo, encoding='utf8'))
 
-def get_data_of_model(model, filters=None, **connection):
+def get_data_of_model(model, order_by=None, limit=None, filters=None, **connection):
     '''
     Get data for declarative model.
 
@@ -29,6 +29,10 @@ def get_data_of_model(model, filters=None, **connection):
     query = session.query(model)
     if filters is not None:
         query = query.filter(filters)
+    if order_by is not None:
+        query = query.order_by(order_by)
+    if limit is not None:
+        query = query.limit(limit)
     return query.all()
 
 def create_session(engine):

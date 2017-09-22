@@ -2,19 +2,23 @@ import React, {Component} from 'react';
 import {ReceiverStorageItem, ActStorageItem} from './SelectableItems';
 import Dialog from 'material-ui/Dialog';
 import DatePicker from 'material-ui/DatePicker';
+import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import TextField from 'material-ui/TextField';
 
-import {ACT_TYPES, MOVING_TYPE, STOREKEEPERS} from '../constants';
+import {ACT_TYPES, MOVING_TYPE} from '../constants';
 
 export default class EditActDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
       openSelectDialog: false,
-      openWarning: false};
+      openWarning: false,
+      openStorekeeperDialog: false
+    };
   }
 
   selectStorage = (id) => {
@@ -57,7 +61,19 @@ export default class EditActDialog extends Component {
   }
 
   selectStorekeeper = (event, index) => {
-    this.props.setState({selectedStorekeeper: STOREKEEPERS[index]});
+    this.props.setState({selectedStorekeeper: this.props.storekeepers[index]});
+  }
+
+  openStorekeeperDialog = () => {
+    this.setState({openStorekeeperDialog: true});
+  }
+
+  closeStorekeeperDialog = () => {
+    this.setState({openStorekeeperDialog: false});
+  }
+
+  deleteStroekeeper = () => {
+    this.props.deleteStroekeeper();
   }
 
   render() {
@@ -81,11 +97,11 @@ export default class EditActDialog extends Component {
                                         storage.id === this.props.selectedReceiverStorage)[0].name;
     }
 
-    const storekeepers = STOREKEEPERS.map((storekeeper, index) =>
-                                            <MenuItem
-                                              value={storekeeper}
-                                              key={index}
-                                              primaryText={storekeeper} />);
+    const storekeepers = this.props.storekeepers.map((storekeeper, index) =>
+                                                      <MenuItem
+                                                        value={storekeeper}
+                                                        key={index}
+                                                        primaryText={storekeeper} />);
 
     return (
       <div>
@@ -94,8 +110,7 @@ export default class EditActDialog extends Component {
           modal={false}
           open={this.props.open}
           onRequestClose={this.props.closeDialog}
-          actions={actions}
-          >
+          actions={actions} >
           <DatePicker
             floatingLabelText="Дата акта"
             autoOk={true}
@@ -109,12 +124,24 @@ export default class EditActDialog extends Component {
             setState={this.props.setState}
             getModelData={this.props.getModelData}
             getModelUpdateData={this.props.getModelUpdateData} />
-          <SelectField
-            value={this.props.selectedStorekeeper}
-            onChange={this.selectStorekeeper}
-            style={{margin: 20}}>
-            {storekeepers}
-          </SelectField>
+          <div style={{display: 'inline-flex'}}>
+            <SelectField
+              value={this.props.selectedStorekeeper}
+              onChange={this.selectStorekeeper}
+              style={{margin: 20}}>
+              {storekeepers}
+            </SelectField>
+            <div>
+              <RaisedButton
+                label="Добавить"
+                onTouchTap={this.openStorekeeperDialog}
+                style={{marginTop: '25px'}}/>
+              <FlatButton
+                label="Удалить"
+                secondary={true}
+                onTouchTap={this.deleteStroekeeper} />
+            </div>
+          </div>
           {(ACT_TYPES[this.props.selectedActsType] === MOVING_TYPE)  &&
             <div>
               <ReceiverStorageItem
@@ -124,6 +151,10 @@ export default class EditActDialog extends Component {
                 />
             </div>}
         </Dialog>
+        <StorekeeperDialog
+          open={this.state.openStorekeeperDialog}
+          closeDialog={this.closeStorekeeperDialog}
+          saveStorekeeper={this.props.saveStorekeeper} />
         <Snackbar
           open={this.state.openWarning}
           message="Необходимо заполнить данные акта!!!"
@@ -131,6 +162,57 @@ export default class EditActDialog extends Component {
           autoHideDuration={3000}
           onActionTouchTap={this.closeWarning}
           onRequestClose={this.closeWarning} />
+      </div>
+    );
+  }
+}
+
+class StorekeeperDialog extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      storekeeperName: ''
+    }
+  }
+
+  onChange = (event, NewValue) => {
+    this.setState({storekeeperName: NewValue});
+  }
+
+  saveStorekeeper = () => {
+    const storekeeperName = this.state.storekeeperName.trim();
+    if (storekeeperName) {
+      this.props.saveStorekeeper(this.state.storekeeperName);
+      this.props.closeDialog();
+      this.setState({storekeeperName: ''});
+    }
+  }
+
+  render() {
+    const actions = [
+      <FlatButton
+        label="Сохранить"
+        primary={true}
+        onTouchTap={this.saveStorekeeper} />,
+      <FlatButton
+        label="Отмена"
+        secondary={true}
+        onTouchTap={this.props.closeDialog} />
+    ];
+
+    return (
+      <div>
+        <Dialog
+          title="Введите данные акта:"
+          modal={false}
+          open={this.props.open}
+          onRequestClose={this.props.closeDialog}
+          actions={actions} >
+          <TextField
+            defaultValue=""
+            floatingLabelText="Ф.И.О. Кладовщика"
+            onChange={this.onChange} />
+        </Dialog>
       </div>
     );
   }

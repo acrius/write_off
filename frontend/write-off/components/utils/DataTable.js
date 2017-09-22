@@ -117,10 +117,10 @@ export default class DataTable extends Component {
   getWidth = (columnName) => {
     let width = 'auto';
     const widths = {
-      code: '70',
-      amount: '70',
-      work_name: '250',
-      unit: '70'
+      code: 70,
+      amount: 70,
+      work_name: 250,
+      unit: 70
     };
 
     if (columnName in widths) {
@@ -130,8 +130,49 @@ export default class DataTable extends Component {
     return width;
   }
 
+  createColumnsStyles = (keyFields) => {
+    let columnsStyles = {};
+
+    for (var index = 0; index < keyFields.length; index++) {
+      columnsStyles[keyFields[index]] = {
+        width: this.getWidth(keyFields[index]),
+        whiteSpace: 'normal',
+        wordWrap: 'break-word'
+      };
+    }
+
+    return columnsStyles;
+  }
+
+  getActivatedColor = (data) => {
+    var color;
+    for (var field in this.props.activated) {
+      for (var valueField in this.props.activated[field]) {
+        if (data[field] == this.props.activated[field][valueField]){
+          color = valueField;
+        }
+      }
+    }
+    return color ? {backgroundColor: color} : {}
+  }
+
   render() {
     const viewsFields = Object.keys(this.props.viewsFields).length > 0 ? this.props.viewsFields : this.getViewsFields();
+
+    const keyFields = Object.keys(viewsFields).map((key, index) => key);
+    const columnsStyles = this.createColumnsStyles(keyFields);
+
+    const activated = Object.keys(this.props.activated).length > 0 ? true : false;
+
+    const rows = this.props.dataSource.map((data, index) =>
+      {
+        const style = activated ? this.getActivatedColor(data) : {};
+        return (
+          <TableRow key={index} selected={this.state.selectedRows.indexOf(index) !== -1}
+            style={style}>
+            {keyFields.map((key, index) =>
+              <TableRowColumn style={columnsStyles[key]} key={index}>{data[key]}</TableRowColumn>)}
+          </TableRow>)});
 
     return (
       <Table
@@ -142,7 +183,7 @@ export default class DataTable extends Component {
           adjustForCheckbox={false}
           displaySelectAll={false}>
           <TableRow>
-            {Object.keys(viewsFields).map((key, index) => {
+            {keyFields.map((key, index) => {
               const columnStyle = {
                 width: this.getWidth(key)
               };
@@ -153,28 +194,7 @@ export default class DataTable extends Component {
           deselectOnClickaway={false}
           displayRowCheckbox={false}
           preScanRows={false}>
-          {this.props.dataSource.map((data, index) =>
-            {
-              let color = null;
-              for (var field in this.props.activated) {
-                for (var valueField in this.props.activated[field]) {
-                  if (data[field] == this.props.activated[field][valueField]){
-                    color = valueField;
-                  }
-                }
-              }
-              const style = color === null ? {} : {backgroundColor: color};
-              return (
-                <TableRow key={index} selected={this.state.selectedRows.indexOf(index) !== -1}
-                  style={style}>
-                  {Object.keys(viewsFields).map((key, index) =>{
-                    const columnStyle = {
-                      width: this.getWidth(key),
-                      whiteSpace: 'normal',
-                      wordWrap: 'break-word'
-                    };
-                    return <TableRowColumn style={columnStyle} key={index}>{data[key]}</TableRowColumn>})}
-                </TableRow>)})}
+          {rows}
         </TableBody>
       </Table>
     );

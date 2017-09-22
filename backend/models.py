@@ -7,6 +7,11 @@ from sqlalchemy.orm import relationship
 
 from settings import DATABASES
 
+class Storekeeper(DATABASES['main']):
+    __tablename__ = 'storekeeper'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(length=200))
+
 class Subdivision(DATABASES['main']): #pylint: disable=R0903
     '''
     Model of subdivisions of corporation.
@@ -88,6 +93,10 @@ class ActTable(DATABASES['main']): #pylint: disable=R0903
     unit = Column(String(10))
     unit_code = Column(String(15))
     act_relation = relationship('Act')
+
+class Alembic(DATABASES['main']):
+    __tablename__ = 'alembic_version'
+    version_num = Column(String(length=32), primary_key=True)
 
 class OutAct(DATABASES['outside']): #pylint: disable=R0903
     '''

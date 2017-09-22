@@ -2,13 +2,27 @@
 Logic for server.
 '''
 from db import get_data_of_model, create_session
-from models import Subdivision, Storage, Act, ActTable, MainThing, DATABASES
+from models import Subdivision, Storage, Act, ActTable, MainThing,\
+                   Storekeeper, DATABASES
 from serializer import dumps, loads
 from synch_db import update_subdivisions_data, update_storages_data,\
                      update_remains_data, update_main_things_data
 from remains import get_calculated_remains
 from uploads import upload
 from acts import genereate_acts
+
+def get_storekeepers():
+    return [str(storekeeper.name) for storekeeper in get_data_of_model(Storekeeper)]
+
+def append_storekeeper(storekeeper):
+    session = create_session(DATABASES['main'].metadata.bind)
+    return loads(storekeeper, Storekeeper, session)
+
+def delete_storekeeper(storekeeper_name):
+    session = create_session(DATABASES['main'].metadata.bind)
+    session.query(Storekeeper).filter(Storekeeper.name == storekeeper_name).delete()
+    session.commit()
+    return [str(storekeeper.name) for storekeeper in get_data_of_model(Storekeeper)]
 
 def get_subdivisions():
     '''
@@ -32,13 +46,13 @@ def get_remains_for_storage(storage_id):
     '''
     return get_calculated_remains(storage_id)
 
-def get_acts_for_storage():
+def get_acts_for_storage(count, act_type):
     '''
     Get data of acts for storage.
 
     :param storage_id: ID
     '''
-    return dumps(get_data_of_model(Act))
+    return dumps(get_data_of_model(Act, limit=count, order_by=Act.id.desc()))
 
 def get_table_of_acts(act_id):
     '''

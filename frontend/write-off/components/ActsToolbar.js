@@ -7,14 +7,26 @@ import MenuItem from 'material-ui/MenuItem';
 import Snackbar from 'material-ui/Snackbar';
 import EditActDialog from './EditActDialog';
 import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 
 import DataTable from './utils/DataTable';
+import Label from './utils/Label';
 
 import {ACT_TYPES} from '../constants';
+
+
 
 class ActsType extends Component {
   setSelected = (event, index) => {
     this.props.setState({selectedActsType: index});
+  }
+
+  showCountActs = () => {
+    this.props.getModelData('acts', '?count=' + this.props.showLastActs);
+  }
+
+  onChange = (event, value) => {
+    this.props.setState({showLastActs: parseInt(value)});
   }
 
   render() {
@@ -24,14 +36,28 @@ class ActsType extends Component {
                                       key={index}
                                       primaryText={actType}/>);
     return (
-      <div>
-        <SelectField
-          value={this.props.selectedActsType}
-          onChange={this.setSelected}
-          style={{margin: 20}}>
-          {items}
-        </SelectField>
-      </div>
+      <Toolbar>
+        <ToolbarGroup>
+          <Label>Тип акта:</Label>
+          <SelectField
+            value={this.props.selectedActsType}
+            onChange={this.setSelected}
+            style={{margin: 20}}>
+            {items}
+          </SelectField>
+          <Label>Показать последние</Label>
+          <TextField
+            hintText="Показать последние"
+            type="number"
+            style={{margin: 20}}
+            onChange={this.onChange}
+            value={this.props.showLastActs}/>
+          <RaisedButton
+            label="Показать"
+            primary={true}
+            onTouchTap={this.showCountActs}/>
+        </ToolbarGroup>
+      </Toolbar>
     );
   }
 }
@@ -44,7 +70,9 @@ export class ActsToolbar extends Component {
         <ToolbarGroup>
           <ActsType
             selectedActsType={this.props.selectedActsType}
-            setState={this.props.setState}/>
+            setState={this.props.setState}
+            showLastActs={this.props.showLastActs}
+            getModelData={this.props.getModelData} />
         </ToolbarGroup>
       </Toolbar>
     );
@@ -227,7 +255,10 @@ export class ActsActionsToolbar extends Component {
           selectedActDate={this.props.selectedActDate}
           selectedActsType={this.props.selectedActsType}
           selectedActStorage={this.props.selectedActStorage}
-          selectedStorekeeper={this.props.selectedStorekeeper} />
+          selectedStorekeeper={this.props.selectedStorekeeper}
+          storekeepers={this.props.storekeepers}
+          saveStorekeeper={this.props.saveStorekeeper}
+          deleteStroekeeper={this.props.deleteStroekeeper} />
         <Snackbar
           open={this.state.openWarning}
           message="Сначала выберите подразделение и склад!!!"

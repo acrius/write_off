@@ -70,3 +70,12 @@ function postRequestReducer(action) {
   }
   return newState;
 }
+
+function deleteRequestReducer(action) {
+  let newState = {};
+  switch (action.type) {
+    case expression:
+
+      break;
+  }
+}

@@ -6,13 +6,14 @@ import rootReducer from '../reducers';
 
 const logger = createLogger();
 
-export default (initialState) => {
-  const store = createStore(rootReducer, initialState, applyMiddleware(thunk, logger));
-  if (module.hot) {
-    module.hot.accept('../reducers.js', () => {
-      const nextRootReducer = require('../reducers.js');
-      store.replaceReducer(nextRootReducer);
-    });
-  }
-  return store;
-}
+export default (initialState) => createStore(rootReducer, initialState, applyMiddleware(thunk));
+// {
+//   const store = createStore(rootReducer, initialState, applyMiddleware(thunk, logger));
+//   if (module.hot) {
+//     module.hot.accept('../reducers.js', () => {
+//       const nextRootReducer = require('../reducers.js');
+//       store.replaceReducer(nextRootReducer);
+//     });
+//   }
+//   return store;
+// }

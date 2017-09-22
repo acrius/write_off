@@ -1,12 +1,11 @@
-import {STOREKEEPERS} from '../constants';
-
 const models = {
   subdivisions: [],
   storages: [],
   acts: [],
   actTable: [],
   remains: [],
-  mainThings: []
+  mainThings: [],
+  storekeepers: []
 };
 
 const selectedFields = {
@@ -23,7 +22,7 @@ const selectedFields = {
   selectedReceiverStorage: null,
   selectedMainThing: null,
   selectedMainThingCode: '',
-  selectedStorekeeper: STOREKEEPERS[0],
+  selectedStorekeeper: '',
   selectedUploadActs: []
 };
 
@@ -31,6 +30,7 @@ const uiValues = {
   uploadComplete: false,
   openAct: false,
   fetching: false,
+  showLastActs: 70,
   error: ''
 };
 

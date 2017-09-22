@@ -21,7 +21,8 @@ const muiTheme = getMiuTheme();
 
 class WriteOff extends Component {
   componentDidMount() {
-    this.props.actions.getModelData(['subdivisions', 'storages', 'mainThings', 'acts']);
+    this.props.actions.getModelData(['subdivisions', 'storages', 'mainThings', 'storekeepers']);
+    this.props.actions.getModelData('acts', '?count=' + this.props.showLastActs);
   }
 
   closeUploadSnackbar = () => {
@@ -63,11 +64,13 @@ class WriteOff extends Component {
               <ActsToolbar
                 style={actsToolbarStyle}
                 selectedActsType={this.props.selectedActsType}
-                setState={this.props.actions.setState} />
+                setState={this.props.actions.setState}
+                showLastActs={this.props.showLastActs}
+                getModelData={this.props.actions.getModelData} />
               <ActTableActionsToobar
                 saveActTable={this.props.actions.saveActTable}
                 setState={this.props.actions.setState}
-                style={actTableActionsToolbarStyle}/>
+                style={actTableActionsToolbarStyle} />
             <div>
             <div style={actsStyle}>
               <Acts
@@ -96,7 +99,10 @@ class WriteOff extends Component {
                 uploadActs={this.props.actions.uploadActs}
                 generateActs={this.props.actions.generateActs}
                 acts={this.props.acts}
-                storages={this.props.storages} />
+                storages={this.props.storages}
+                storekeepers={this.props.storekeepers}
+                saveStorekeeper={this.props.actions.saveStorekeeper}
+                deleteStroekeeper={this.props.actions.deleteStroekeeper} />
             </div>
             <div style={actTableStyle}>
                 <ActTable

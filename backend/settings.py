@@ -11,11 +11,13 @@ from secret import DATABASE_NAME, DATABASE_HOST, DATABASE_PORT, DATABASE_USER, D
 
 PROJECT_PATH = dirname(abspath(__file__))
 
+MAIN_DATABASE_PATH = 'write-off.db'
+
 DATABASES = {
     'main': get_database(
         echo=True,
         drivername='sqlite',
-        database='write-off.db'),
+        database=MAIN_DATABASE_PATH),
     'outside': get_database(
         echo=True,
         drivername='mysql+pymysql',

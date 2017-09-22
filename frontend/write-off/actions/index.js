@@ -7,10 +7,12 @@ import {GET_REQUEST,
         POST_FAILED,
         POST_ACT_SUCCESS,
         POST_ACT_TABLE_SUCCESS,
+        POST_STOREKEEPER_SUCCESS,
         POST_ACT_QUERY,
         POST_ACT_ACTIVATE_QUERY,
         POST_ACT_UPLOADS_QUERY,
         POST_ACT_TABLE_QUERY,
+        POST_STOREKEEPER_QUERY,
         GENERATE_ACTS_QUERY,
         SET_STATE,
         MOVING_TYPE,
@@ -19,7 +21,11 @@ import {GET_REQUEST,
         CLOSE_ACT,
         WRITE_OFF,
         PRINT_START,
-        PRINT_SUCCESS} from '../constants';
+        PRINT_SUCCESS,
+        DELETE_REQUEST,
+        DELETE_STOREKEEPER_SUCCESS,
+        DELETE_FAILED,
+        DELETE_STOREKEEPER_QUERY} from '../constants';
 import {load, getFormatDate} from '../../utils';
 import {move, write} from './prints';
 
@@ -43,6 +49,37 @@ export function getModelData(modelsName, queryParam='') {
       getModelRequest(dispatch, modelsName, GET_QUERIES_OF_MODELS[modelsName] + queryParam);
     }
   };
+}
+
+export function saveStorekeeper(storekeeperName) {
+  return (dispatch) => {
+    dispatch({type: POST_REQUEST});
+
+    const storekeeperData = {name: storekeeperName};
+
+    try {
+      fetch(POST_STOREKEEPER_QUERY,
+        {
+          'mode': 'cors',
+          'method': 'post',
+          'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, GET',
+            'Access-Control-Request-Headers': 'Accept',
+            'Content-Type': 'application/json'
+          },
+          'body': JSON.stringify(storekeeperData)
+        }
+      ).then(
+        () => {getModelRequest(dispatch, 'storekeepers', GET_QUERIES_OF_MODELS['storekeepers']);}
+      );
+    } catch(e) {
+      dispatch({
+        type: POST_FAILED,
+        payload: new Error(e)
+      });
+    }
+  }
 }
 
 function getModelRequest(dispatch, modelName, query) {
@@ -114,7 +151,7 @@ export function saveAct() {
           'body': JSON.stringify(actData)
         }
       ).then(
-        () => {getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts']);}
+        () => {getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts'] + '?count=' + state.showLastActs);}
       );
     } catch(e) {
       dispatch({
@@ -230,13 +267,42 @@ export function activateAct() {
           }
         ).then(
           () => {
-            getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts']);}
+            getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts'] + '?count=' + state.showLastActs);}
         );
       } catch(e) {
         dispatch({
           type: POST_FAILED,
           payload: new Error(e)
         });
+      }
+  }
+}
+
+export function deleteStroekeeper() {
+  return (dispatch, getState) => {
+      const state = getState().writeOff;
+
+      dispatch({type: DELETE_REQUEST});
+
+      if (state.selectedStorekeeper) {
+        try {
+          fetch(DELETE_STOREKEEPER_QUERY + state.selectedStorekeeper,
+            {
+              'mode': 'cors',
+              'method': 'delete',
+              'body': ''
+            }
+          ).then(
+            () => {
+              getModelRequest(dispatch, 'storekeepers', GET_QUERIES_OF_MODELS['storekeepers']);
+              setState({selectedStorekeeper: ''});}
+          );
+        } catch(e) {
+          dispatch({
+            type: DELETE_FAILED,
+            payload: new Error(e)
+          });
+        }
       }
   }
 }
