@@ -108,6 +108,7 @@ class OutAct(DATABASES['outside']): #pylint: disable=R0903
     storage = Column(Integer)
     receiver_storage = Column(Integer)
     act_type = Column(Integer)
+    in_id = Column(Integer)
 
 class OutActTable(DATABASES['outside']): #pylint: disable=R0903
     '''

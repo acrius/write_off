@@ -47,7 +47,8 @@ def create_out_act(inner_act):
     Create out act from inner act.
     '''
     return OutAct(date=inner_act.date, storage=inner_act.storage,
-                  receiver_storage=inner_act.receiver_storage, act_type=inner_act.act_type)
+                  receiver_storage=inner_act.receiver_storage,
+                  act_type=inner_act.act_type, in_id=inner_act.id)
 
 def create_out_act_string(string, act):
     '''
