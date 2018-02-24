@@ -5,7 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 export class ActTableActionsToobar extends Component {
   closeAct = () => {
     this.props.setState({openAct: false});
-  }
+  };
 
   render() {
     return (

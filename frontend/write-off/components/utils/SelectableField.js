@@ -13,12 +13,12 @@ class SelectDialog extends Component {
 
   setSelected = (key) => {
     this.state = {selectedKey: key};
-  }
+  };
 
   select = () => {
     this.props.setSelected(this.state.selectedKey);
     this.props.closeDialog();
-  }
+  };
 
   render() {
     let actions = [
@@ -69,7 +69,7 @@ export default class SelectableField extends Component {
     setSelected: React.PropTypes.func,
     updateDataSource: React.PropTypes.func,
     selectedKeys: React.PropTypes.any
-  }
+  };
 
   static defaultProps = {
     dataSource: [],
@@ -81,7 +81,7 @@ export default class SelectableField extends Component {
     selectedKeys: null,
     setSelected: null,
     updateDataSource: null
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -99,29 +99,29 @@ export default class SelectableField extends Component {
 
   openSelectDialog = () => {
     this.setState({openSelectDialog: true});
-  }
+  };
 
   closeSelectDialog = () => {
     this.setState({openSelectDialog: false});
-  }
+  };
 
   clearSelectedValue = () => {
     this.setSelected(null);
-  }
+  };
 
   setSelected = (key) => {
     if (this.props.setSelected !== null) {
       this.props.setSelected(key);
     }
     this.setView(key);
-  }
+  };
 
   setView = (keys) => {
     const viewSelectedValue = this.props
                                   .dataSource.filter((data) => data[this.props.keyField] === keys)
                                              .map((data) => data[this.props.viewField]).join(',');
     this.setState({viewSelectedValue: viewSelectedValue});
-  }
+  };
 
   render() {
     return (

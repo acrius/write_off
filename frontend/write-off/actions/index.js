@@ -1,50 +1,54 @@
-import {GET_REQUEST,
-        GET_FAILED,
-        GET_SUCCESS,
-        GET_QUERIES_OF_MODELS,
-        GET_UPDATED_QUERIES_OF_MODELS,
-        POST_REQUEST,
-        POST_FAILED,
-        POST_ACT_SUCCESS,
-        POST_ACT_TABLE_SUCCESS,
-        POST_STOREKEEPER_SUCCESS,
-        POST_ACT_QUERY,
-        POST_ACT_ACTIVATE_QUERY,
-        POST_ACT_UPLOADS_QUERY,
-        POST_ACT_TABLE_QUERY,
-        POST_STOREKEEPER_QUERY,
-        GENERATE_ACTS_QUERY,
-        SET_STATE,
-        MOVING_TYPE,
-        ACT_TYPES,
-        OPEN_ACT,
-        CLOSE_ACT,
-        WRITE_OFF,
-        PRINT_START,
-        PRINT_SUCCESS,
-        DELETE_REQUEST,
-        DELETE_STOREKEEPER_SUCCESS,
-        DELETE_FAILED,
-        DELETE_STOREKEEPER_QUERY} from '../constants';
+import {
+  GET_REQUEST,
+  GET_FAILED,
+  GET_SUCCESS,
+  GET_QUERIES_OF_MODELS,
+  GET_UPDATED_QUERIES_OF_MODELS,
+  POST_REQUEST,
+  POST_FAILED,
+  POST_ACT_SUCCESS,
+  POST_ACT_TABLE_SUCCESS,
+  POST_STOREKEEPER_SUCCESS,
+  POST_ACT_QUERY,
+  POST_ACT_ACTIVATE_QUERY,
+  POST_ACT_UPLOADS_QUERY,
+  POST_ACT_TABLE_QUERY,
+  POST_STOREKEEPER_QUERY,
+  GENERATE_ACTS_QUERY,
+  SET_STATE,
+  MOVING_TYPE,
+  ACT_TYPES,
+  OPEN_ACT,
+  CLOSE_ACT,
+  WRITE_OFF,
+  PRINT_START,
+  PRINT_SUCCESS,
+  DELETE_REQUEST,
+  DELETE_STOREKEEPER_SUCCESS,
+  DELETE_FAILED,
+  DELETE_STOREKEEPER_QUERY
+} from '../constants';
 import {load, getFormatDate} from '../../utils';
-import {move, write} from './prints';
+import {move, write, generateUploadReport} from './prints';
 
-export function getModelUpdateData(modelsName, queryParam='') {
+export function getModelUpdateData(modelsName, queryParam = '') {
   return (dispatch) => {
     if (Array.isArray(modelsName)) {
       modelsName.forEach((modelName) => {
-      getModelRequest(dispatch, modelName, GET_UPDATED_QUERIES_OF_MODELS[modelName] + queryParam);})
+        getModelRequest(dispatch, modelName, GET_UPDATED_QUERIES_OF_MODELS[modelName] + queryParam);
+      })
     } else {
       getModelRequest(dispatch, modelsName, GET_UPDATED_QUERIES_OF_MODELS[modelsName] + queryParam);
     }
   };
 }
 
-export function getModelData(modelsName, queryParam='') {
+export function getModelData(modelsName, queryParam = '') {
   return (dispatch) => {
     if (Array.isArray(modelsName)) {
       modelsName.forEach((modelName) => {
-      getModelRequest(dispatch, modelName, GET_QUERIES_OF_MODELS[modelName] + queryParam);})
+        getModelRequest(dispatch, modelName, GET_QUERIES_OF_MODELS[modelName] + queryParam);
+      })
     } else {
       getModelRequest(dispatch, modelsName, GET_QUERIES_OF_MODELS[modelsName] + queryParam);
     }
@@ -59,21 +63,23 @@ export function saveStorekeeper(storekeeperName) {
 
     try {
       fetch(POST_STOREKEEPER_QUERY,
-        {
-          'mode': 'cors',
-          'method': 'post',
-          'headers': {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST, GET',
-            'Access-Control-Request-Headers': 'Accept',
-            'Content-Type': 'application/json'
-          },
-          'body': JSON.stringify(storekeeperData)
-        }
+          {
+            'mode': 'cors',
+            'method': 'post',
+            'headers': {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'POST, GET',
+              'Access-Control-Request-Headers': 'Accept',
+              'Content-Type': 'application/json'
+            },
+            'body': JSON.stringify(storekeeperData)
+          }
       ).then(
-        () => {getModelRequest(dispatch, 'storekeepers', GET_QUERIES_OF_MODELS['storekeepers']);}
+          () => {
+            getModelRequest(dispatch, 'storekeepers', GET_QUERIES_OF_MODELS['storekeepers']);
+          }
       );
-    } catch(e) {
+    } catch (e) {
       dispatch({
         type: POST_FAILED,
         payload: new Error(e)
@@ -86,15 +92,15 @@ function getModelRequest(dispatch, modelName, query) {
   dispatch({type: GET_REQUEST});
   try {
     load(query).then(
-      (data) => {
-        let payloadData = {};
-        payloadData[modelName] = data;
-        dispatch({
-          type: GET_SUCCESS,
-          payload: payloadData
+        (data) => {
+          let payloadData = {};
+          payloadData[modelName] = data;
+          dispatch({
+            type: GET_SUCCESS,
+            payload: payloadData
+          });
         });
-      });
-  } catch(e) {
+  } catch (e) {
     dispatch({
       type: GET_FAILED,
       payload: new Error(e)
@@ -139,21 +145,23 @@ export function saveAct() {
 
     try {
       fetch(POST_ACT_QUERY,
-        {
-          'mode': 'cors',
-          'method': 'post',
-          'headers': {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST, GET',
-            'Access-Control-Request-Headers': 'Accept',
-            'Content-Type': 'application/json'
-          },
-          'body': JSON.stringify(actData)
-        }
+          {
+            'mode': 'cors',
+            'method': 'post',
+            'headers': {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'POST, GET',
+              'Access-Control-Request-Headers': 'Accept',
+              'Content-Type': 'application/json'
+            },
+            'body': JSON.stringify(actData)
+          }
       ).then(
-        () => {getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts'] + '?count=' + state.showLastActs);}
+          () => {
+            getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts'] + '?count=' + state.showLastActs);
+          }
       );
-    } catch(e) {
+    } catch (e) {
       dispatch({
         type: POST_FAILED,
         payload: new Error(e)
@@ -222,24 +230,24 @@ export function saveActTable() {
 
     try {
       fetch(POST_ACT_TABLE_QUERY + state.selectedAct,
-        {
-          'mode': 'cors',
-          'method': 'post',
-          'headers': {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST, GET',
-            'Access-Control-Request-Headers': 'Accept',
-            'Content-Type': 'application/json'
-          },
-          'body': JSON.stringify(actTable)
-        }
+          {
+            'mode': 'cors',
+            'method': 'post',
+            'headers': {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'POST, GET',
+              'Access-Control-Request-Headers': 'Accept',
+              'Content-Type': 'application/json'
+            },
+            'body': JSON.stringify(actTable)
+          }
       ).then(
-        () => {
+          () => {
             getModelRequest(dispatch, 'actTable', GET_QUERIES_OF_MODELS['actTable'] + state.selectedAct);
             getModelRequest(dispatch, 'remains', GET_QUERIES_OF_MODELS['remains'] + state.selectedActStorage);
           }
       );
-    } catch(e) {
+    } catch (e) {
       dispatch({
         type: POST_FAILED,
         payload: new Error(e)
@@ -250,10 +258,10 @@ export function saveActTable() {
 
 export function activateAct() {
   return (dispatch, getState) => {
-      const state = getState().writeOff;
+    const state = getState().writeOff;
 
-      try {
-        fetch(POST_ACT_ACTIVATE_QUERY + state.selectedAct,
+    try {
+      fetch(POST_ACT_ACTIVATE_QUERY + state.selectedAct,
           {
             'mode': 'cors',
             'method': 'post',
@@ -265,45 +273,47 @@ export function activateAct() {
             },
             'body': ''
           }
-        ).then(
+      ).then(
           () => {
-            getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts'] + '?count=' + state.showLastActs);}
-        );
-      } catch(e) {
-        dispatch({
-          type: POST_FAILED,
-          payload: new Error(e)
-        });
-      }
+            getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts'] + '?count=' + state.showLastActs);
+          }
+      );
+    } catch (e) {
+      dispatch({
+        type: POST_FAILED,
+        payload: new Error(e)
+      });
+    }
   }
 }
 
 export function deleteStroekeeper() {
   return (dispatch, getState) => {
-      const state = getState().writeOff;
+    const state = getState().writeOff;
 
-      dispatch({type: DELETE_REQUEST});
+    dispatch({type: DELETE_REQUEST});
 
-      if (state.selectedStorekeeper) {
-        try {
-          fetch(DELETE_STOREKEEPER_QUERY + state.selectedStorekeeper,
+    if (state.selectedStorekeeper) {
+      try {
+        fetch(DELETE_STOREKEEPER_QUERY + state.selectedStorekeeper,
             {
               'mode': 'cors',
               'method': 'delete',
               'body': ''
             }
-          ).then(
+        ).then(
             () => {
               getModelRequest(dispatch, 'storekeepers', GET_QUERIES_OF_MODELS['storekeepers']);
-              setState({selectedStorekeeper: ''});}
-          );
-        } catch(e) {
-          dispatch({
-            type: DELETE_FAILED,
-            payload: new Error(e)
-          });
-        }
+              setState({selectedStorekeeper: ''});
+            }
+        );
+      } catch (e) {
+        dispatch({
+          type: DELETE_FAILED,
+          payload: new Error(e)
+        });
       }
+    }
   }
 }
 
@@ -313,23 +323,23 @@ export function uploadActs() {
 
     try {
       fetch(POST_ACT_UPLOADS_QUERY + state.selectedStorage,
-        {
-          'mode': 'cors',
-          'method': 'post',
-          'headers': {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST, GET',
-            'Access-Control-Request-Headers': 'Accept',
-            'Content-Type': 'application/json'
-          },
-          'body': JSON.stringify(state.selectedUploadActs)
-        }
+          {
+            'mode': 'cors',
+            'method': 'post',
+            'headers': {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'POST, GET',
+              'Access-Control-Request-Headers': 'Accept',
+              'Content-Type': 'application/json'
+            },
+            'body': JSON.stringify(state.selectedUploadActs)
+          }
       ).then(
-        () => {
-          getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts']);
-          setStateWithDispatch(dispatch, {uploadComplete: true});
-      });
-    } catch(e) {
+          () => {
+            getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts'] + '?count=' + getState().writeOff.showLastActs);
+            setStateWithDispatch(dispatch, {uploadComplete: true});
+          });
+    } catch (e) {
       dispatch({
         type: POST_FAILED,
         payload: new Error(e)
@@ -344,7 +354,7 @@ export function removeActString() {
     if (state.selectedActString !== null) {
       setStateWithDispatch(dispatch, {
         actTable: state.actTable.filter((actString) =>
-          actString.code !== state.selectedActString
+            actString.code !== state.selectedActString
         )
       });
       getModelRequest(dispatch, 'remains', GET_QUERIES_OF_MODELS['remains'] + state.selectedActStorage);
@@ -362,13 +372,13 @@ export function generateActs() {
 
     try {
       load(GENERATE_ACTS_QUERY + state.selectedSubdivision).then(
-        (data) => {
+          (data) => {
             dispatch({
               type: GET_SUCCESS,
               payload: {acts: data}
             });
-      });
-    } catch(e) {
+          });
+    } catch (e) {
       dispatch({
         type: GET_FAILED,
         payload: new Error(e)
@@ -394,4 +404,30 @@ export function print() {
       type: PRINT_SUCCESS
     });
   }
+}
+
+export function printUploadReport() {
+  return (dispatch, getState) => {
+    const startUploadDate = getState().writeOff.selectedUploadStartDateString;
+    const endUploadDate = getState().writeOff.selectedUploadEndDateString;
+
+    let query = GET_QUERIES_OF_MODELS['acts'];
+
+    if (startUploadDate) {
+      query += `?upload_start=${startUploadDate}`
+    } else {
+      query += `?upload_start=01.01.00`
+    }
+
+    if (endUploadDate) {
+      query += `&upload_end=${endUploadDate}`;
+    } else {
+      query += `&upload_end=31.12.30`;
+    }
+
+    load(query).then(
+        data =>
+            generateUploadReport(data, getState().writeOff));
+  };
+
 }

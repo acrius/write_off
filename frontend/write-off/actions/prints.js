@@ -451,3 +451,62 @@ export function write(state) {
 
   pdfMake.createPdf(doc).download('Ведомость № ' + state.selectedAct + '.pdf');
 }
+
+export function generateUploadReport(data, store) {
+  const tableHead = [[
+    {text: 'Дата акта', fontSize: 8},
+    {text: 'Номер акта', fontSize: 8},
+    {text: 'Кладовщик', fontSize: 8},
+    {text: 'Склад', fontSize: 8},
+    {text: 'Склад-приемник', fontSize: 8},
+    {text: 'Дата выгрузки', fontSize: 8},
+    {text: 'Дата загрузки', fontSize: 8}]];
+
+  const tableBody = data.map(
+      (act) => [
+        {text: act.date, fontSize: 8},
+        {text: act.id, fontSize: 8},
+        {text: act.storekeeper, fontSize: 8},
+        {text: getStorageName(act.storage, store.storages), fontSize: 8},
+        {text: act.receiver_storage ? getStorageName(act.receiver_storage, store.storages) : '', fontSize: 8},
+        {text: act.upload_date, fontSize: 8},
+        {text: act.download_date, fontSize: 8}
+      ]);
+
+  const table = tableHead.concat(tableBody);
+
+  const doc = {
+    info: {
+      title: 'Отчет по выгрузке документов за период с ' + store.selectedUploadStartDateString + ' по ' + store.selectedUploadEndDateString
+    },
+    pageSize: 'A4',
+    pageOrientation: 'portrait',
+    pageMargins: [20, 30, 40, 20],
+    footer: (currentPage, pageCount) => {
+      return {
+        text: 'Стр. ' + currentPage.toString() + ' из ' + pageCount.toString(),
+        alignment: 'right',
+        fontSize: 8,
+        margin: [0, 0, 20, 0]
+      };
+    },
+    content: [
+      {
+        text: 'Отчет по выгрузке документов за период с ' + store.selectedUploadStartDateString + ' по ' + store.selectedUploadEndDateString,
+        alignment: 'center',
+        fontSize: 12,
+        margin: [0, 20]
+      },
+      {
+        table: {
+          headerRows: 1,
+
+          body: table
+        },
+        margin: [0, 10]
+      },
+    ]
+  };
+
+  pdfMake.createPdf(doc).download('Отчет по выгрузке документов за период с ' + store.selectedUploadStartDateString + ' по ' + store.selectedUploadEndDateString + '.pdf');
+}

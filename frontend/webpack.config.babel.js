@@ -4,7 +4,7 @@ var webpack = require('webpack');
 module.exports = {
   entry: './index.js',
   output: {
-    path: `/mnt/c/Users/bda.DOKENISEY/Documents/dev/write_off/backend/static`,
+    path: `/home/acrius/dev/dev/write_off/backend/static`,
     filename: 'application.js'
   },
   resolve: {

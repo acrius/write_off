@@ -23,7 +23,11 @@ const selectedFields = {
   selectedMainThing: null,
   selectedMainThingCode: '',
   selectedStorekeeper: '',
-  selectedUploadActs: []
+  selectedUploadActs: [],
+  selectedUploadStartDate: null,
+  selectedUploadStartDateString: null,
+  selectedUploadEndDate: null,
+  selectedUploadEndDateString: null,
 };
 
 const uiValues = {

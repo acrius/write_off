@@ -4,7 +4,7 @@ import DataTable from './utils/DataTable';
 export class ActTable extends Component {
   setSelected = (key) => {
     this.props.setState({selectedActString: key});
-  }
+  };
 
   render() {
     const actTable = this.props.actTable.map((act) => {

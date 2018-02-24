@@ -1,7 +1,6 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {render} from 'react-dom';
-import {Router, Route, IndexRoute, browserHistory} from 'react-router';
-import {createStore} from 'redux';
+import {Router, Route, browserHistory} from 'react-router';
 import {Provider} from 'react-redux';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import configureStore from './store/configureStore';

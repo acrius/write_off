@@ -27,7 +27,7 @@ class WriteOff extends Component {
 
   closeUploadSnackbar = () => {
     this.props.actions.setState({uploadComplete: false});
-  }
+  };
 
   render() {
     const actsStyle = {
@@ -102,7 +102,11 @@ class WriteOff extends Component {
                 storages={this.props.storages}
                 storekeepers={this.props.storekeepers}
                 saveStorekeeper={this.props.actions.saveStorekeeper}
-                deleteStroekeeper={this.props.actions.deleteStroekeeper} />
+                deleteStroekeeper={this.props.actions.deleteStroekeeper}
+                selectedUploadStartDate={this.props.selectedUploadStartDate}
+                selectedUploadEndDate={this.props.selectedUploadEndDate}
+                printUploadReport={this.props.actions.printUploadReport}
+              />
             </div>
             <div style={actTableStyle}>
                 <ActTable

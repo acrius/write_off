@@ -72,11 +72,11 @@ export class ReceiverStorageItem extends Component {
 export class SubdivisionItem extends Component {
   setSelected = (key) => {
     this.props.setState({selectedSubdivision: key});
-  }
+  };
 
   updateDataSource = () => {
     this.props.getModelUpdateData('subdivisions');
-  }
+  };
 
   render() {
     return (
@@ -101,11 +101,11 @@ export class StorageItem extends Component {
     this.props.setState({selectedStorage: key});
     this.props.setState({selectedActStorage: key});
     this.props.setState({selectedAct: null, selectedActString: null});
-  }
+  };
 
   updateDataSource = () => {
     this.props.getModelUpdateData('storages');
-  }
+  };
 
   render() {
     return (

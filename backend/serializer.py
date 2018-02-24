@@ -3,6 +3,7 @@ Module contains functions for serialize and deserialize
 :sqlalchemy: objects of declarative model to python collections.
 Module support Integer and String types.
 '''
+from datetime import date
 from collections import Iterable, Mapping
 
 def dumps(sa_data, count=0):
@@ -20,7 +21,7 @@ def dumps(sa_data, count=0):
         return _dump(sa_data)
 
 def _dump(sa_object):
-    return {key: value for key, value in sa_object.__dict__.items() if not key.startswith('_')}
+    return {key: (value.strftime('%d.%m.%y') if isinstance(value, date) else value) for key, value in sa_object.__dict__.items() if not key.startswith('_')}
 
 def loads(data, model, session):
     '''

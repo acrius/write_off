@@ -24,7 +24,7 @@ export class Acts extends Component {
     } else {
       this.props.setState({selectedAct: null});
     }
-  }
+  };
 
   render() {
     const acts = this.props
@@ -51,7 +51,8 @@ export class Acts extends Component {
           height="650"
           activated={{
             is_active: {'#669999': false},
-            is_upload: {'#ccff99': true}
+            is_upload: {'#a0c4ff': true},
+            is_download: {'#ccff99': true}
           }}/>
       </div>
     );

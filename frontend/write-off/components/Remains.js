@@ -18,7 +18,8 @@ export class RemainsTable extends Component {
         }}
         selectedKeys={this.props.selectedRemain}
         setSelected={this.setSelected}
-        height="650" />
+        height="650"
+        preScan={false}/>
     );
   }
 }

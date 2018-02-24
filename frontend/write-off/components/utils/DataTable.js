@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {Table, TableBody, TableHeader,
-        TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui';
+import {
+  Table, TableBody, TableHeader,
+  TableHeaderColumn, TableRow, TableRowColumn
+} from 'material-ui';
 
 export default class DataTable extends Component {
   static propTypes = {
@@ -11,8 +13,9 @@ export default class DataTable extends Component {
     setSelected: React.PropTypes.func,
     height: React.PropTypes.any,
     multiSelectable: React.PropTypes.bool,
-    activated: React.PropTypes.object
-  }
+    activated: React.PropTypes.object,
+    preScan: React.PropTypes.bool
+  };
 
   static defaultProps = {
     dataSource: [],
@@ -22,8 +25,9 @@ export default class DataTable extends Component {
     selectedKeys: null,
     multiSelectable: false,
     setSelected: null,
-    activated: {}
-  }
+    activated: {},
+    preScan: true
+  };
 
   constructor(props) {
     super(props);
@@ -41,15 +45,15 @@ export default class DataTable extends Component {
     if (props.selectedKeys !== null) {
       props.dataSource.forEach((data, index) => {
         if (props.multiSelectable ?
-        props.selectedKeys.indexOf(data[props.keyField]) !== -1
-        : data[props.keyField] === props.selectedKeys) {
+                props.selectedKeys.indexOf(data[props.keyField]) !== -1
+                : data[props.keyField] === props.selectedKeys) {
           selectedRows.push(index);
         }
       });
     }
 
     return selectedRows;
-  }
+  };
 
   onCellClick = (key) => {
     if (this.props.multiSelectable) {
@@ -57,7 +61,7 @@ export default class DataTable extends Component {
     } else {
       this.select(key);
     }
-  }
+  };
 
   select = (key) => {
     let selectedRows = this.state.selectedRows;
@@ -69,7 +73,7 @@ export default class DataTable extends Component {
       selectedRows = [];
     }
     this.setSelected(selectedRows);
-  }
+  };
 
   multiSelect = (key) => {
     let selectedRows = this.state.selectedRows;
@@ -81,17 +85,17 @@ export default class DataTable extends Component {
     }
 
     this.setSelected(selectedRows);
-  }
+  };
 
   setSelected = (selectedRows) => {
     this.setState({selectedRows: selectedRows});
 
     if (this.props.setSelected !== null) {
       let keys = this.props.dataSource
-                           .filter((data, index) => selectedRows.indexOf(index) !== -1)
-                           .map((data) => data[this.props.keyField]);
+          .filter((data, index) => selectedRows.indexOf(index) !== -1)
+          .map((data) => data[this.props.keyField]);
 
-      if(!this.props.multiSelectable) {
+      if (!this.props.multiSelectable) {
         if (keys.length > 0) {
           keys = keys[0];
         } else {
@@ -101,18 +105,18 @@ export default class DataTable extends Component {
 
       this.props.setSelected(keys)
     }
-  }
+  };
 
   getViewsFields = () => {
     var viewsFields = {};
     if (this.props.dataSource.length > 0) {
-      for (var key in this.props.dataSource[0]){
+      for (var key in this.props.dataSource[0]) {
         viewsFields[key] = key;
       }
     }
 
     return viewsFields;
-  }
+  };
 
   getWidth = (columnName) => {
     let width = 'auto';
@@ -128,7 +132,7 @@ export default class DataTable extends Component {
     }
 
     return width;
-  }
+  };
 
   createColumnsStyles = (keyFields) => {
     let columnsStyles = {};
@@ -142,19 +146,19 @@ export default class DataTable extends Component {
     }
 
     return columnsStyles;
-  }
+  };
 
   getActivatedColor = (data) => {
     var color;
     for (var field in this.props.activated) {
       for (var valueField in this.props.activated[field]) {
-        if (data[field] == this.props.activated[field][valueField]){
+        if (data[field] == this.props.activated[field][valueField]) {
           color = valueField;
         }
       }
     }
     return color ? {backgroundColor: color} : {}
-  }
+  };
 
   render() {
     const viewsFields = Object.keys(this.props.viewsFields).length > 0 ? this.props.viewsFields : this.getViewsFields();
@@ -165,38 +169,36 @@ export default class DataTable extends Component {
     const activated = Object.keys(this.props.activated).length > 0 ? true : false;
 
     const rows = this.props.dataSource.map((data, index) =>
-      {
-        const style = activated ? this.getActivatedColor(data) : {};
-        return (
-          <TableRow key={index} selected={this.state.selectedRows.indexOf(index) !== -1}
-            style={style}>
-            {keyFields.map((key, index) =>
+        <TableRow key={index} selected={this.state.selectedRows.indexOf(index) !== -1} rowNumber={index}
+                  style={activated ? this.getActivatedColor(data) : {}}>
+          {keyFields.map((key, index) =>
               <TableRowColumn style={columnsStyles[key]} key={index}>{data[key]}</TableRowColumn>)}
-          </TableRow>)});
+        </TableRow>);
 
     return (
-      <Table
-        height={this.props.height}
-        onCellClick={this.onCellClick}
-        multiSelectable={this.props.multiSelectable}>
-        <TableHeader
-          adjustForCheckbox={false}
-          displaySelectAll={false}>
-          <TableRow>
-            {keyFields.map((key, index) => {
-              const columnStyle = {
-                width: this.getWidth(key)
-              };
-              return <TableHeaderColumn style={columnStyle} key={index}>{viewsFields[key]}</TableHeaderColumn>})}
-          </TableRow>
-        </TableHeader>
-        <TableBody
-          deselectOnClickaway={false}
-          displayRowCheckbox={false}
-          preScanRows={false}>
-          {rows}
-        </TableBody>
-      </Table>
+        <Table
+            height={this.props.height}
+            onCellClick={this.onCellClick}
+            multiSelectable={this.props.multiSelectable}>
+          <TableHeader
+              adjustForCheckbox={false}
+              displaySelectAll={false}>
+            <TableRow>
+              {keyFields.map((key, index) => {
+                const columnStyle = {
+                  width: this.getWidth(key)
+                };
+                return <TableHeaderColumn style={columnStyle} key={index}>{viewsFields[key]}</TableHeaderColumn>
+              })}
+            </TableRow>
+          </TableHeader>
+          <TableBody
+              deselectOnClickaway={false}
+              displayRowCheckbox={false}
+              preScanRows={this.props.preScan}>
+            {rows}
+          </TableBody>
+        </Table>
     );
   }
 }
