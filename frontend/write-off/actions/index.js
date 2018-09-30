@@ -63,21 +63,21 @@ export function saveStorekeeper(storekeeperName) {
 
     try {
       fetch(POST_STOREKEEPER_QUERY,
-          {
-            'mode': 'cors',
-            'method': 'post',
-            'headers': {
-              'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Methods': 'POST, GET',
-              'Access-Control-Request-Headers': 'Accept',
-              'Content-Type': 'application/json'
-            },
-            'body': JSON.stringify(storekeeperData)
-          }
+        {
+          'mode': 'cors',
+          'method': 'post',
+          'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, GET',
+            'Access-Control-Request-Headers': 'Accept',
+            'Content-Type': 'application/json'
+          },
+          'body': JSON.stringify(storekeeperData)
+        }
       ).then(
-          () => {
-            getModelRequest(dispatch, 'storekeepers', GET_QUERIES_OF_MODELS['storekeepers']);
-          }
+        () => {
+          getModelRequest(dispatch, 'storekeepers', GET_QUERIES_OF_MODELS['storekeepers']);
+        }
       );
     } catch (e) {
       dispatch({
@@ -92,14 +92,14 @@ function getModelRequest(dispatch, modelName, query) {
   dispatch({type: GET_REQUEST});
   try {
     load(query).then(
-        (data) => {
-          let payloadData = {};
-          payloadData[modelName] = data;
-          dispatch({
-            type: GET_SUCCESS,
-            payload: payloadData
-          });
+      (data) => {
+        let payloadData = {};
+        payloadData[modelName] = data;
+        dispatch({
+          type: GET_SUCCESS,
+          payload: payloadData
         });
+      });
   } catch (e) {
     dispatch({
       type: GET_FAILED,
@@ -145,21 +145,21 @@ export function saveAct() {
 
     try {
       fetch(POST_ACT_QUERY,
-          {
-            'mode': 'cors',
-            'method': 'post',
-            'headers': {
-              'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Methods': 'POST, GET',
-              'Access-Control-Request-Headers': 'Accept',
-              'Content-Type': 'application/json'
-            },
-            'body': JSON.stringify(actData)
-          }
+        {
+          'mode': 'cors',
+          'method': 'post',
+          'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, GET',
+            'Access-Control-Request-Headers': 'Accept',
+            'Content-Type': 'application/json'
+          },
+          'body': JSON.stringify(actData)
+        }
       ).then(
-          () => {
-            getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts'] + '?count=' + state.showLastActs);
-          }
+        () => {
+          getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts'] + '?start_date=' + state.startDateString + (state.endDateString ? '&end_date=' + state.endDateString : ''));
+        }
       );
     } catch (e) {
       dispatch({
@@ -230,22 +230,22 @@ export function saveActTable() {
 
     try {
       fetch(POST_ACT_TABLE_QUERY + state.selectedAct,
-          {
-            'mode': 'cors',
-            'method': 'post',
-            'headers': {
-              'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Methods': 'POST, GET',
-              'Access-Control-Request-Headers': 'Accept',
-              'Content-Type': 'application/json'
-            },
-            'body': JSON.stringify(actTable)
-          }
+        {
+          'mode': 'cors',
+          'method': 'post',
+          'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, GET',
+            'Access-Control-Request-Headers': 'Accept',
+            'Content-Type': 'application/json'
+          },
+          'body': JSON.stringify(actTable)
+        }
       ).then(
-          () => {
-            getModelRequest(dispatch, 'actTable', GET_QUERIES_OF_MODELS['actTable'] + state.selectedAct);
-            getModelRequest(dispatch, 'remains', GET_QUERIES_OF_MODELS['remains'] + state.selectedActStorage);
-          }
+        () => {
+          getModelRequest(dispatch, 'actTable', GET_QUERIES_OF_MODELS['actTable'] + state.selectedAct);
+          getModelRequest(dispatch, 'remains', GET_QUERIES_OF_MODELS['remains'] + state.selectedActStorage);
+        }
       );
     } catch (e) {
       dispatch({
@@ -262,21 +262,21 @@ export function activateAct() {
 
     try {
       fetch(POST_ACT_ACTIVATE_QUERY + state.selectedAct,
-          {
-            'mode': 'cors',
-            'method': 'post',
-            'headers': {
-              'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Methods': 'POST, GET',
-              'Access-Control-Request-Headers': 'Accept',
-              'Content-Type': 'application/json'
-            },
-            'body': ''
-          }
+        {
+          'mode': 'cors',
+          'method': 'post',
+          'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, GET',
+            'Access-Control-Request-Headers': 'Accept',
+            'Content-Type': 'application/json'
+          },
+          'body': ''
+        }
       ).then(
-          () => {
-            getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts'] + '?count=' + state.showLastActs);
-          }
+        () => {
+          getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts'] + '?start_date=' + state.startDateString + (state.endDateString ? '&end_date=' + state.endDateString : ''));
+        }
       );
     } catch (e) {
       dispatch({
@@ -296,16 +296,16 @@ export function deleteStroekeeper() {
     if (state.selectedStorekeeper) {
       try {
         fetch(DELETE_STOREKEEPER_QUERY + state.selectedStorekeeper,
-            {
-              'mode': 'cors',
-              'method': 'delete',
-              'body': ''
-            }
+          {
+            'mode': 'cors',
+            'method': 'delete',
+            'body': ''
+          }
         ).then(
-            () => {
-              getModelRequest(dispatch, 'storekeepers', GET_QUERIES_OF_MODELS['storekeepers']);
-              setState({selectedStorekeeper: ''});
-            }
+          () => {
+            getModelRequest(dispatch, 'storekeepers', GET_QUERIES_OF_MODELS['storekeepers']);
+            setState({selectedStorekeeper: ''});
+          }
         );
       } catch (e) {
         dispatch({
@@ -323,22 +323,26 @@ export function uploadActs() {
 
     try {
       fetch(POST_ACT_UPLOADS_QUERY + state.selectedStorage,
-          {
-            'mode': 'cors',
-            'method': 'post',
-            'headers': {
-              'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Methods': 'POST, GET',
-              'Access-Control-Request-Headers': 'Accept',
-              'Content-Type': 'application/json'
-            },
-            'body': JSON.stringify(state.selectedUploadActs)
-          }
-      ).then(
-          () => {
-            getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts'] + '?count=' + getState().writeOff.showLastActs);
+        {
+          'mode': 'cors',
+          'method': 'post',
+          'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, GET',
+            'Access-Control-Request-Headers': 'Accept',
+            'Content-Type': 'application/json'
+          },
+          'body': JSON.stringify(state.selectedUploadActs)
+        }
+      ).then(response => response.json())
+        .then(success => {
+          getModelRequest(dispatch, 'acts', GET_QUERIES_OF_MODELS['acts'] + '?start_date=' + state.startDateString + (state.endDateString ? '&end_date=' + state.endDateString : ''));
+          if (success) {
             setStateWithDispatch(dispatch, {uploadComplete: true});
-          });
+          } else {
+            setStateWithDispatch(dispatch, {uploadError: true});
+          }
+        });
     } catch (e) {
       dispatch({
         type: POST_FAILED,
@@ -354,7 +358,7 @@ export function removeActString() {
     if (state.selectedActString !== null) {
       setStateWithDispatch(dispatch, {
         actTable: state.actTable.filter((actString) =>
-            actString.code !== state.selectedActString
+          actString.code !== state.selectedActString
         )
       });
       getModelRequest(dispatch, 'remains', GET_QUERIES_OF_MODELS['remains'] + state.selectedActStorage);
@@ -372,12 +376,12 @@ export function generateActs() {
 
     try {
       load(GENERATE_ACTS_QUERY + state.selectedSubdivision).then(
-          (data) => {
-            dispatch({
-              type: GET_SUCCESS,
-              payload: {acts: data}
-            });
+        (data) => {
+          dispatch({
+            type: GET_SUCCESS,
+            payload: {acts: data}
           });
+        });
     } catch (e) {
       dispatch({
         type: GET_FAILED,
@@ -426,8 +430,8 @@ export function printUploadReport() {
     }
 
     load(query).then(
-        data =>
-            generateUploadReport(data, getState().writeOff));
+      data =>
+        generateUploadReport(data, getState().writeOff));
   };
 
 }

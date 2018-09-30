@@ -16,8 +16,8 @@ export default (action) => {
       };
       break;
     case SHOW_ACTS:
-      bewState = {
-        showLastActs: action.payload 
+      newState = {
+        showLastActs: action.payload
       };
   }
   return newState;

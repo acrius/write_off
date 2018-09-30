@@ -31,10 +31,15 @@ const selectedFields = {
 };
 
 const uiValues = {
+  uploadError: false,
   uploadComplete: false,
   openAct: false,
   fetching: false,
   showLastActs: 70,
+  startDate: null,
+  startDateString: '',
+  endDate: null,
+  endDateString: '',
   error: ''
 };
 

@@ -4,7 +4,7 @@ var webpack = require('webpack');
 module.exports = {
   entry: './index.js',
   output: {
-    path: `/home/acrius/dev/dev/write_off/backend/static`,
+    path: path.join(__dirname, '../backend/static'),
     filename: 'application.js'
   },
   resolve: {

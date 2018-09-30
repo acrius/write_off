@@ -1,6 +1,7 @@
 '''
 Logic for server.
 '''
+from datetime import datetime
 from sqlalchemy import and_
 from db import get_data_of_model, create_session
 from models import Subdivision, Storage, Act, ActTable, MainThing, \
@@ -9,8 +10,9 @@ from serializer import dumps, loads
 from synch_db import update_subdivisions_data, update_storages_data, \
 	update_remains_data, update_main_things_data, update_downloads
 from remains import get_calculated_remains
-from uploads import upload
+from uploads import upload, check_uploaded_acts
 from acts import genereate_acts
+from settings import UPLOAD_ATTEMPTS_COUNT
 
 
 def get_storekeepers():
@@ -54,7 +56,7 @@ def get_remains_for_storage(storage_id):
 	return get_calculated_remains(storage_id)
 
 
-def get_acts_for_storage(count, act_type, upload_start, upload_end):
+def get_acts_for_storage(count, act_type, upload_start, upload_end, start_date, end_date):
 	'''
 	Get data of acts for storage.
 
@@ -67,6 +69,12 @@ def get_acts_for_storage(count, act_type, upload_start, upload_end):
 
 	if upload_end:
 		filters.append(Act.upload_date <= upload_end)
+
+	if start_date:
+		filters.append(Act.act_date >= start_date)
+
+	if end_date:
+		filters.append(Act.act_date <= end_date)
 
 	return dumps(get_data_of_model(Act, limit=count, order_by=Act.id.desc(), filters=and_(*filters) if filters else None))
 
@@ -94,6 +102,9 @@ def save_act(act):
 	:param act: Data of act.
 	'''
 	session = create_session(DATABASES['main'].metadata.bind)
+	if act.get('date'):
+		date = datetime.strptime(act.get('date'), '%d.%m.%y').date()
+		act['act_date'] = date
 	return loads(act, Act, session)
 
 
@@ -153,14 +164,22 @@ def activate_act(act_id):
 		session.commit()
 
 
-def upload_acts(acts_ids, storage_id):
+def upload_acts(acts_ids, storage_id, try_count = 0):
 	'''
 	Views for upload acts.
 
 	:param acts_ids: List of acts ids.
+	:param storage_id: Id of storage
+	:param try_count: Count of retries
 	'''
-	if acts_ids:
-		upload(acts_ids, storage_id)
+	if acts_ids and try_count < UPLOAD_ATTEMPTS_COUNT:
+		try:
+			upload(acts_ids, storage_id)
+			return check_uploaded_acts(acts_ids)
+		except BaseException:
+			return upload_acts(acts_ids, storage_id, try_count=try_count + 1)
+	else:
+		return False
 
 
 def genereate_acts_views(subdivision_id):

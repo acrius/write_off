@@ -21,27 +21,36 @@ const muiTheme = getMiuTheme();
 
 class WriteOff extends Component {
   componentDidMount() {
+    const date = new Date();
+    const dateString = ('0' + date.getDate()).slice(-2) + '.' + ('0' + (date.getMonth() + 1)).slice(-2) + '.' + date.getFullYear().toString().slice(-2);
     this.props.actions.getModelData(['subdivisions', 'storages', 'mainThings', 'storekeepers']);
-    this.props.actions.getModelData('acts', '?count=' + this.props.showLastActs);
+    this.props.actions.getModelData('acts', '?start_date=' + dateString);
   }
 
   closeUploadSnackbar = () => {
     this.props.actions.setState({uploadComplete: false});
   };
 
+  closeUploadErrorSnackbar = () => {
+    this.props.actions.setState({uploadError: false});
+  };
+
   render() {
     const actsStyle = {
       width: this.props.openAct ? '0%' : '100%',
       display: this.props.openAct ? 'none' : 'block',
-      float: 'left'};
+      float: 'left'
+    };
     const actTableStyle = {
       width: this.props.openAct ? '50%' : '0%',
       display: this.props.openAct ? 'inline-block' : 'none',
-      float: 'left'};
+      float: 'left'
+    };
     const remainsTableStyle = {
       width: this.props.openAct ? '50%' : '0%',
       display: this.props.openAct ? 'inline-block' : 'none',
-      float: 'right'};
+      float: 'right'
+    };
 
     const mainStyle = {};
     const progressStyle = {display: 'none'};
@@ -59,70 +68,74 @@ class WriteOff extends Component {
               storages={this.props.storages}
               selectedStorage={this.props.selectedStorage}
               getModelData={this.props.actions.getModelData}
-              getModelUpdateData={this.props.actions.getModelUpdateData} />
+              getModelUpdateData={this.props.actions.getModelUpdateData}/>
 
-              <ActsToolbar
-                style={actsToolbarStyle}
-                selectedActsType={this.props.selectedActsType}
-                setState={this.props.actions.setState}
-                showLastActs={this.props.showLastActs}
-                getModelData={this.props.actions.getModelData} />
-              <ActTableActionsToobar
-                saveActTable={this.props.actions.saveActTable}
-                setState={this.props.actions.setState}
-                style={actTableActionsToolbarStyle} />
+            <ActsToolbar
+              style={actsToolbarStyle}
+              selectedActsType={this.props.selectedActsType}
+              setState={this.props.actions.setState}
+              showLastActs={this.props.showLastActs}
+              getModelData={this.props.actions.getModelData}
+              startDate={this.props.startDate}
+              startDateString={this.props.startDateString}
+              endDate={this.props.endDate}
+              endDateString={this.props.endDateString}/>
+            <ActTableActionsToobar
+              saveActTable={this.props.actions.saveActTable}
+              setState={this.props.actions.setState}
+              style={actTableActionsToolbarStyle}/>
             <div>
-            <div style={actsStyle}>
-              <Acts
-                acts={this.props.acts}
-                selectedActsType={this.props.selectedActsType}
-                storages={this.props.storages}
-                selectedAct={this.props.selectedAct}
-                setState={this.props.actions.setState} />
-              <ActsActionsToolbar
-                storages={this.props.storages}
-                getModelData={this.props.actions.getModelData}
-                getModelUpdateData={this.props.actions.getModelUpdateData}
-                setState={this.props.actions.setState}
-                selectedReceiverStorage={this.props.selectedReceiverStorage}
-                saveAct={this.props.actions.saveAct}
-                selectedAct={this.props.selectedAct}
-                selectedActDate={this.props.selectedActDate}
-                selectedActDateString={this.props.selectedActDateString}
-                selectedStorage={this.props.selectedStorage}
-                selectedSubdivision={this.props.selectedSubdivision}
-                selectedActsType={this.props.selectedActsType}
-                selectedUploadActs={this.props.selectedUploadActs}
-                selectedActStorage={this.props.selectedActStorage}
-                selectedStorekeeper={this.props.selectedStorekeeper}
-                activateAct={this.props.actions.activateAct}
-                uploadActs={this.props.actions.uploadActs}
-                generateActs={this.props.actions.generateActs}
-                acts={this.props.acts}
-                storages={this.props.storages}
-                storekeepers={this.props.storekeepers}
-                saveStorekeeper={this.props.actions.saveStorekeeper}
-                deleteStroekeeper={this.props.actions.deleteStroekeeper}
-                selectedUploadStartDate={this.props.selectedUploadStartDate}
-                selectedUploadEndDate={this.props.selectedUploadEndDate}
-                printUploadReport={this.props.actions.printUploadReport}
-              />
-            </div>
-            <div style={actTableStyle}>
+              <div style={actsStyle}>
+                <Acts
+                  acts={this.props.acts}
+                  selectedActsType={this.props.selectedActsType}
+                  storages={this.props.storages}
+                  selectedAct={this.props.selectedAct}
+                  setState={this.props.actions.setState}/>
+                <ActsActionsToolbar
+                  storages={this.props.storages}
+                  getModelData={this.props.actions.getModelData}
+                  getModelUpdateData={this.props.actions.getModelUpdateData}
+                  setState={this.props.actions.setState}
+                  selectedReceiverStorage={this.props.selectedReceiverStorage}
+                  saveAct={this.props.actions.saveAct}
+                  selectedAct={this.props.selectedAct}
+                  selectedActDate={this.props.selectedActDate}
+                  selectedActDateString={this.props.selectedActDateString}
+                  selectedStorage={this.props.selectedStorage}
+                  selectedSubdivision={this.props.selectedSubdivision}
+                  selectedActsType={this.props.selectedActsType}
+                  selectedUploadActs={this.props.selectedUploadActs}
+                  selectedActStorage={this.props.selectedActStorage}
+                  selectedStorekeeper={this.props.selectedStorekeeper}
+                  activateAct={this.props.actions.activateAct}
+                  uploadActs={this.props.actions.uploadActs}
+                  generateActs={this.props.actions.generateActs}
+                  acts={this.props.acts}
+                  storages={this.props.storages}
+                  storekeepers={this.props.storekeepers}
+                  saveStorekeeper={this.props.actions.saveStorekeeper}
+                  deleteStroekeeper={this.props.actions.deleteStroekeeper}
+                  selectedUploadStartDate={this.props.selectedUploadStartDate}
+                  selectedUploadEndDate={this.props.selectedUploadEndDate}
+                  printUploadReport={this.props.actions.printUploadReport}
+                />
+              </div>
+              <div style={actTableStyle}>
                 <ActTable
                   actTable={this.props.actTable}
                   selectedActString={this.props.selectedActString}
                   setState={this.props.actions.setState}
-                  mainThings={this.props.mainThings} />
+                  mainThings={this.props.mainThings}/>
                 <ActTableToolbar
                   removeActString={this.props.actions.removeActString}
-                  print={this.props.actions.print} />
-            </div>
-            <div style={remainsTableStyle}>
+                  print={this.props.actions.print}/>
+              </div>
+              <div style={remainsTableStyle}>
                 <RemainsTable
                   remains={this.props.remains}
                   selectedRemain={this.props.selectedRemain}
-                  setState={this.props.actions.setState} />
+                  setState={this.props.actions.setState}/>
                 <RemainsToolbar
                   selectedStorage={this.props.selectedActStorage}
                   getModelUpdateData={this.props.actions.getModelUpdateData}
@@ -132,17 +145,22 @@ class WriteOff extends Component {
                   selectedMainThing={this.props.selectedMainThing}
                   selectedSubdivision={this.props.selectedSubdivision}
                   selectedActsType={this.props.selectedActsType}
-                  selectedRemain={this.props.selectedRemain} />
+                  selectedRemain={this.props.selectedRemain}/>
+              </div>
             </div>
           </div>
+          <Snackbar
+            open={this.props.uploadComplete}
+            message="Выгрузка завершена"
+            autoHideDuration={5000}
+            onRequestClose={this.closeUploadSnackbar}/>
+          <Snackbar
+            open={this.props.uploadError}
+            message="Выгрузка завершилась неудачей. Попробуйте позже."
+            autoHideDuration={30000}
+            onRequestClose={this.closeUploadErrorSnackbar}/>
         </div>
-        <Snackbar
-          open={this.props.uploadComplete}
-          message="Выгрузка завершена"
-          autoHideDuration={5000}
-          onRequestClose={this.closeUploadSnackbar} />
-      </div>
-    </MuiThemeProvider>);
+      </MuiThemeProvider>);
   }
 }
 

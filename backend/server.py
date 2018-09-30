@@ -6,7 +6,7 @@ from datetime import datetime
 
 from sanic import Sanic
 from sanic.response import json, html
-from sanic_cors import CORS
+from sanic_cors import CORS, cross_origin
 
 import settings
 
@@ -18,7 +18,7 @@ from views import get_subdivisions, get_storages_for_subdivision, \
 	upload_acts, genereate_acts_views, get_storekeepers, \
 	append_storekeeper, delete_storekeeper, update_downloads_view
 
-from tasks import change_storekeeper
+from tasks import upgrade_act_dates
 
 from migrate import migrate
 
@@ -28,7 +28,7 @@ app = Sanic()  # pylint: disable-msg=C0103
 
 app.static('/static', 'static')
 
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 
 # Routing
@@ -43,7 +43,7 @@ def index(request):  # pylint: disable=W0613
 	return response
 
 
-@app.route('/api/v01/subdivisions', methods=['GET', ])
+@app.route('/api/v01/subdivisions', methods=['GET', 'OPTIONS'])
 def get_subdivisions_api(request):  # pylint: disable=W0613
 	'''
 	Get subdivisions with rest-api.
@@ -59,7 +59,8 @@ def get_storages(request):  # pylint: disable=W0613
 	return json(get_storages_for_subdivision())
 
 
-@app.route('/api/v01/acts', methods=['GET', 'POST'])
+@app.route('/api/v01/acts', methods=['GET', 'POST', 'OPTIONS'])
+@cross_origin(app)
 def get_or_post_acts(request):
 	'''
 	Get or post acts of storage with rest-api.
@@ -68,17 +69,24 @@ def get_or_post_acts(request):
 		count = request.args.get('count')
 		act_type = request.args.get('act_type')
 		upload_start = request.args.get('upload_start')
+		start_date = request.args.get('start_date')
+		if start_date:
+			start_date = datetime.strptime(start_date, '%d.%m.%y').date()
+		end_date = request.args.get('end_date')
+		if end_date:
+			end_date = datetime.strptime(end_date, '%d.%m.%y').date()
 		if upload_start:
 			upload_start = datetime.strptime(upload_start, '%d.%m.%y').date()
 		upload_end = request.args.get('upload_end')
 		if upload_end:
 			upload_end = datetime.strptime(upload_end, '%d.%m.%y').date()
-		return json(get_acts_for_storage(count, act_type, upload_start, upload_end))
+		return json(get_acts_for_storage(count, act_type, upload_start, upload_end, start_date, end_date))
 	elif request.method == 'POST':
 		return json(save_act(request.json))
 
 
-@app.route('/api/v01/act_table', methods=['GET', 'POST'])
+@app.route('/api/v01/act_table', methods=['GET', 'POST', 'OPTIONS'])
+@cross_origin(app)
 def get_or_post_acts_table(request):
 	'''
 	Get or post table of act with rest-api
@@ -157,7 +165,8 @@ def genereate_acts(request):
 		return json(get_acts_for_storage())
 
 
-@app.route('/api/v01/activate_act', methods=['POST'])
+@app.route('/api/v01/activate_act', methods=['POST', 'OPTIONS'])
+@cross_origin(app)
 def activate_act_api(request):
 	'''
 	Activate or diactivate if act is actived.
@@ -168,18 +177,19 @@ def activate_act_api(request):
 		return json(True)
 
 
-@app.route('/api/v01/upload_acts', methods=['POST'])
+@app.route('/api/v01/upload_acts', methods=['POST', 'OPTIONS'])
+@cross_origin(app)
 def upload_acts_api(request):
 	'''
 	Upload acts.
 	'''
 	storage_id = request.args.get('storage')
 	if storage_id is not None:
-		upload_acts(request.json, storage_id)
-		return json(True)
+		return json(upload_acts(request.json, storage_id))
 
 
-@app.route('/api/v01/storekeepers', methods=['GET', 'POST', 'DELETE'])
+@app.route('/api/v01/storekeepers', methods=['GET', 'POST', 'DELETE', 'OPTIONS'])
+@cross_origin(app)
 def get_or_post_storekeepers_api(request):
 	if request.method == 'GET':
 		return json(get_storekeepers())
@@ -195,5 +205,6 @@ if __name__ == '__main__':
 	# change_storekeeper()
 	migrate()
 	update_downloads_view()
+	upgrade_act_dates()
 	print('Start server')
 	app.run(host=settings.HOST['address'], port=settings.HOST['port'])

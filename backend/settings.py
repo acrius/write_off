@@ -26,9 +26,11 @@ DATABASES = {
         database=DATABASE_NAME,
         username=DATABASE_USER,
         password=DATABASE_PASSWORD,
-        query={'charset': 'utf8'}
+        query={'charset': 'cp1251'}
     )
 }
+
+UPLOAD_ATTEMPTS_COUNT = 5
 
 HOST = {
     'address': '0.0.0.0',
